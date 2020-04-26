@@ -1,0 +1,25 @@
+version: "3.1"
+
+services:
+    app:
+        build: ./apps/app
+        ports:
+            - '8080:8080'
+        depends_on:
+            - api
+    api:
+        build: ./apps/api
+        ports:
+            - '3000:3000'
+        depends_on:
+            - db
+    db:
+        container_name: mongoDB
+        image: mongo:latest
+        restart: always
+        volumes: 
+            - ./iiData:/data/db
+        environment:
+            - MONGO_INITDB_DATABASE= InvestInsight
+        ports:
+            - 27017:27017

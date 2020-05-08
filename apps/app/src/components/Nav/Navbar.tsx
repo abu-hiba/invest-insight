@@ -12,11 +12,22 @@ export interface NavbarProps {
     signOut: any // TODO: find correct type
 }
 
+const menuContainer = {
+    borderRadius: 0,
+    padding: '0.5em 1em',
+    margin: 0,
+    maxWidth: `${window.screen.width}px`
+}
+
 const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
     const [activeItem, setActiveItem] = useState("")  
     const handleClick = (name: string) => setActiveItem(name) 
     return (
-        <Segment attached='top' inverted style={{ borderRadius: 0, padding: '0.5em 1em', marginBottom: 0 }}>
+        <Segment
+            attached='top'
+            inverted
+            style={menuContainer}
+        >
             <Menu inverted size='large' secondary style={{ padding: '0.5em' }}>
                 <Responsive
                     onClick={() => toggleMobileMenu()}
@@ -59,12 +70,17 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                     <Menu.Item>
                         {auth.user.data ? (
                             <>
-                                <Button
-                                    as={Link}
-                                    to='/profile'
-                                    basic
-                                    inverted
-                                ><Icon name='user circle' />Profile</Button>
+                                <Link to='/profile'>
+                                    <Button
+                                        // as={Link}
+                                        // to='/profile'
+                                        basic
+                                        inverted
+                                        name='profile'
+                                        active={activeItem === 'profile'}
+                                        onClick={() => handleClick('profile')}
+                                    ><Icon name='user circle' />Profile</Button>
+                                </Link>
                                 <Button
                                     basic
                                     inverted
@@ -74,17 +90,25 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                             </>
                         ) : (
                             <>
-                                <Button
-                                    as={Link}
-                                    to='/sign-in'
-                                    basic
-                                    inverted
-                                >Log In</Button>
+                                <Link to='/sign-in'>
+                                    <Button
+                                        // as={Link}
+                                        // to='/sign-in'
+                                        basic
+                                        inverted
+                                        name='signin'
+                                        active={activeItem === 'signin'}
+                                        onClick={() => handleClick('signin')}
+                                    >Log In</Button>
+                                </Link>
                                 <Button
                                     as={Link}
                                     to='/'
                                     basic
                                     inverted
+                                    name='signout'
+                                    active={activeItem === 'signout'}
+                                    onClick={() => handleClick('signout')}
                                     style={{ marginLeft: '0.5em' }}
                                 >Sign Up</Button>
                             </>

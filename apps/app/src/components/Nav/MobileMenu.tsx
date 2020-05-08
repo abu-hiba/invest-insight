@@ -16,14 +16,17 @@ export interface MobileMenuProps {
 const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMenuProps) => {
     const [visible, setVisible] = useState(false)
     const [activeItem, setActiveItem] = useState("")
-    const handleClick = (name: string) => setActiveItem(name) 
+    const handleClick = (name: string): void => {
+        setActiveItem(name)
+        setVisible(false)
+    } 
 
     useEffect(() => {
         setVisible(show)
     }, [show]) 
 
     return (
-        <Sidebar.Pushable as={Segment}  style={{ border: 'none', borderRadius: '0', marginTop: '0' }}>
+        <Sidebar.Pushable as={Segment} style={{ border: 'none', borderRadius: '0', marginTop: '0' }}>
             <Sidebar
                 as={Menu}
                 animation="overlay"
@@ -34,40 +37,39 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
                 width="thin"
                 borderless
             >
-                <Menu.Item>
-                    {auth.user.data ? (
-                        <>
-                            <Button
-                                as={Link}
-                                to='/profile'
-                                basic
-                                inverted
-                            ><Icon name='user circle' />Profile</Button>
-                            <Button
-                                basic
-                                inverted
-                                style={{ marginTop: '0.5em' }}
-                                onClick={signOut}
-                            >Sign Out</Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button
-                                as={Link}
-                                to='/sign-in'
-                                basic
-                                inverted
-                            >Log In</Button>
-                            <Button
-                                as={Link}
-                                to='/'
-                                basic
-                                inverted
-                                style={{ marginTop: '0.5em' }}
-                            >Sign Up</Button>
-                        </>
-                    )}   
-                </Menu.Item>
+                {auth.user.data ? (
+                    <>
+                        <Menu.Item
+                            as={Link}
+                            to='/profile'
+                            name='profile'
+                            active={activeItem === name}
+                            onClick={() => handleClick(name)}
+                        ><Icon name='user circle' />Profile</Menu.Item>
+                        <Menu.Item
+                            style={{ marginTop: '0.5em' }}
+                            onClick={signOut}
+                        >Sign Out</Menu.Item>
+                    </>
+                ) : (
+                    <>
+                        <Menu.Item
+                            as={Link}
+                            to='/sign-in'
+                            name='signin'
+                            active={activeItem === 'signin'}
+                            onClick={() => handleClick('signin')}
+                        >Log In</Menu.Item>
+                        <Menu.Item
+                            as={Link}
+                            to='/'
+                            name='signup'
+                            style={{ marginTop: '0.5em' }}
+                            active={activeItem === 'signup'}
+                            onClick={() => handleClick('signup')}
+                        >Sign Up</Menu.Item>
+                    </>
+                )}   
                 {items.map(({ name, path }: MenuItem) => (
                     <Menu.Item
                         key={name}
@@ -79,8 +81,9 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
                     />
                 ))} 
             </Sidebar> 
-
-            <Sidebar.Pusher>
+            <Sidebar.Pusher
+                style={{ minHeight: `${window.screen.height}px` }}
+            >
                 {children}
             </Sidebar.Pusher>
         </Sidebar.Pushable> 

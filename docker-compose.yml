@@ -2,19 +2,33 @@ version: "3.1"
 
 services:
     app:
+        container_name: invest_insight_app
         build: ./apps/app
         ports:
             - '8080:8080'
+        #volumes:
+        #    - ./apps/app:/invest-insight/app/
         depends_on:
             - api
     api:
+        container_name: invest_insight_api
         build: ./apps/api
         ports:
             - '3000:3000'
+        #volumes:
+        #    - ./apps/api:/invest-insight/api/
+        links:
+            - redis
         depends_on:
-            - db
-    db:
-        container_name: mongoDB
+            - mongo-server
+            # - redis
+    redis:
+        container_name: invest_insight_cache
+        image: redis:latest
+        expose:
+            - 6379
+    mongo-server:
+        container_name: invest_insight_db
         image: mongo:latest
         restart: always
         volumes: 

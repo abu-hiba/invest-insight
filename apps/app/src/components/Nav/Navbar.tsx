@@ -2,11 +2,17 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Segment, Menu, Button, Image, Icon, Responsive } from 'semantic-ui-react'
 import SearchField from '../Input/SearchField'
+import { AuthCtx } from '../../containers/AuthContext'
 
 export interface MenuItem { name: string, path: string } 
-export interface NavbarProps { items: MenuItem[], toggleMobileMenu: Function }
+export interface NavbarProps {
+    items: MenuItem[],
+    auth: AuthCtx,
+    toggleMobileMenu: Function,
+    signOut: any // TODO: find correct type
+}
 
-const Navbar = ({ items, toggleMobileMenu }: NavbarProps) => {
+const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
     const [activeItem, setActiveItem] = useState("")  
     const handleClick = (name: string) => setActiveItem(name) 
     return (
@@ -51,8 +57,38 @@ const Navbar = ({ items, toggleMobileMenu }: NavbarProps) => {
                 </Responsive>
                 <Responsive as={Menu.Menu} minWidth={770} position="right">
                     <Menu.Item>
-                        <Button basic inverted>Log In</Button>
-                        <Button basic inverted style={{ marginLeft: '0.5em' }}>Sign Up</Button>
+                        {auth.user.data ? (
+                            <>
+                                <Button
+                                    as={Link}
+                                    to='/profile'
+                                    basic
+                                    inverted
+                                ><Icon name='user circle' />Profile</Button>
+                                <Button
+                                    basic
+                                    inverted
+                                    style={{ marginLeft: '0.5em' }}
+                                    onClick={signOut}
+                                >Sign Out</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    as={Link}
+                                    to='/sign-in'
+                                    basic
+                                    inverted
+                                >Log In</Button>
+                                <Button
+                                    as={Link}
+                                    to='/'
+                                    basic
+                                    inverted
+                                    style={{ marginLeft: '0.5em' }}
+                                >Sign Up</Button>
+                            </>
+                        )}
                     </Menu.Item>
                 </Responsive>
             </Menu>

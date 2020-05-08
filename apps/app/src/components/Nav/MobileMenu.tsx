@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Sidebar, Segment, Menu, Image, Button } from 'semantic-ui-react'
+import { Sidebar, Segment, Menu, Icon, Button } from 'semantic-ui-react'
 import { MenuItem } from './Navbar'
+import { AuthCtx } from '../../containers/AuthContext'
 
 export interface MobileMenuProps {
     items: MenuItem[],
+    auth: AuthCtx,
     children: React.ReactNode,
     show: boolean,
-    setShow: Function
+    setShow: Function,
+    signOut: any // TODO: find correct type
 }
 
-const MobileMenu = ({ items, children, show, setShow }: MobileMenuProps) => {
+const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMenuProps) => {
     const [visible, setVisible] = useState(false)
-    const [activeItem, setActiveItem] = useState("")  
+    const [activeItem, setActiveItem] = useState("")
     const handleClick = (name: string) => setActiveItem(name) 
 
     useEffect(() => {
@@ -32,8 +35,38 @@ const MobileMenu = ({ items, children, show, setShow }: MobileMenuProps) => {
                 borderless
             >
                 <Menu.Item>
-                    <Button basic inverted>Log In</Button>
-                    <Button basic inverted style={{ marginTop: '0.5em' }}>Sign Up</Button>
+                    {auth.user.data ? (
+                        <>
+                            <Button
+                                as={Link}
+                                to='/profile'
+                                basic
+                                inverted
+                            ><Icon name='user circle' />Profile</Button>
+                            <Button
+                                basic
+                                inverted
+                                style={{ marginTop: '0.5em' }}
+                                onClick={signOut}
+                            >Sign Out</Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                as={Link}
+                                to='/sign-in'
+                                basic
+                                inverted
+                            >Log In</Button>
+                            <Button
+                                as={Link}
+                                to='/'
+                                basic
+                                inverted
+                                style={{ marginTop: '0.5em' }}
+                            >Sign Up</Button>
+                        </>
+                    )}   
                 </Menu.Item>
                 {items.map(({ name, path }: MenuItem) => (
                     <Menu.Item

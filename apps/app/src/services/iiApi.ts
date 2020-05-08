@@ -1,4 +1,4 @@
-const uri = process.env.HOST_URL
+const uri = process.env.API_URL
 
 function iiApi<T, B>(
     method: string,
@@ -6,7 +6,7 @@ function iiApi<T, B>(
     data?: B,
     headers = new Headers
 ): Promise<T> {
-    if (data) {
+    if (method === 'post' || method === 'put' || method === 'patch') {
         return fetch(`${uri}${path}`, {
             method: method.toUpperCase(),
             mode: 'cors',

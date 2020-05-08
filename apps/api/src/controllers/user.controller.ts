@@ -1,20 +1,53 @@
-import express from 'express'
+import { Request } from 'express'
 import { Controller } from '../interfaces/controller.interface'
 import { UserService } from '../services/user.service'
+import { Endpoint } from '../routes/router'
 
 export class UserController implements Controller {
-    private service: UserService
-    public router = express.Router()
+    public service: UserService
+    // public router = express.Router()
 
     constructor() {
         this.service = new UserService()
-        this.routes()
     }
 
-    private routes() {
-        this.router.get("/user/all", this.service.getAll)
-        this.router.post("/user", this.service.create)
-        this.router.get("/user/:id", this.service.findById)
-        this.router.put("/user/:id", this.service.update)
-    }
+    public endpoints: Endpoint[] = [
+        {
+            method: 'post',
+            route: '/auth/register',
+            handler: async (req: Request) => {
+                const user = await this.service.create(req.body)
+                req.session && (req.session.user = user)
+                return user
+            }
+        },
+        {
+            method: 'post',
+            route: '/auth/sign-in',
+            handler: async (req: Request) => {
+                const user = await this.service.authenticate(req.body)
+                req.session && (req.session.user = user) 
+                return user 
+            }
+        },
+        {
+            method: 'post',
+            route: '/auth/sign-out',
+            handler: async (req: Request) =>
+                new Promise((resolve, reject) => {
+                    req.session!.destroy(err => {
+                        err ? reject(console.error(err)) : resolve({ success: true })
+                    })
+                })
+        }, {
+            method: 'get',
+            route: '/auth/me',
+            handler: (req: Request) => req.session!.user ? { user: req.session } : {}
+        },
+        {
+            method: 'get',
+            route: '/auth/all',
+            handler: async () => await this.service.getAll()
+        },
+    ]
 }

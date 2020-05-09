@@ -72,8 +72,6 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                             <>
                                 <Link to='/profile'>
                                     <Button
-                                        // as={Link}
-                                        // to='/profile'
                                         basic
                                         inverted
                                         name='profile'
@@ -92,8 +90,6 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                             <>
                                 <Link to='/sign-in'>
                                     <Button
-                                        // as={Link}
-                                        // to='/sign-in'
                                         basic
                                         inverted
                                         name='signin'
@@ -103,12 +99,12 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                                 </Link>
                                 <Button
                                     as={Link}
-                                    to='/'
+                                    to='/registration'
                                     basic
                                     inverted
-                                    name='signout'
-                                    active={activeItem === 'signout'}
-                                    onClick={() => handleClick('signout')}
+                                    name='signup'
+                                    active={activeItem === 'signup'}
+                                    onClick={() => handleClick('signup')}
                                     style={{ marginLeft: '0.5em' }}
                                 >Sign Up</Button>
                             </>

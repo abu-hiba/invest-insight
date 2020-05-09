@@ -62,7 +62,7 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
                         >Log In</Menu.Item>
                         <Menu.Item
                             as={Link}
-                            to='/'
+                            to='/registration'
                             name='signup'
                             style={{ marginTop: '0.5em' }}
                             active={activeItem === 'signup'}

@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import { User, UserModel } from '../models/user.model'
 
 export class UserService {
-    public getAll = async () => await User.find({}, '-hash')
+    public getAll = async () => await User.find({}, '-password')
 
     public create = async (userParams: UserModel) => {
         const { password, ...values } = userParams
@@ -51,6 +51,6 @@ export class UserService {
         await user.save()
     }
 
-    public findById = async (id: number) => await User.findById(id, '-hash')
-    public findByUsername = async (username: string) => await User.findOne({ username }, '-hash')
+    public findById = async (id: number) => await User.findById(id, '-password')
+    public findByUsername = async (username: string) => await User.findOne({ username }, '-password')
 }

@@ -50,10 +50,16 @@ const useProvideAuth = () => {
             .catch(error => setUser({ data: null, loading: false, error }))
     }
 
-    const signUp = () => {} 
+    const signUp = (username: string, email: string, password:string): void => {
+        iiApi<User, User>('post', '/auth/register', { username, email, password })
+            .then(user => setUser({ data: user, loading: false }))
+            .catch(error => setUser({ data: null, loading: false, error }))
+    } 
 
     const signOut = (): void => {
-        iiApi('post', '/auth/sign-out').then(() => setUser({ data: null, loading: false }))
+        iiApi('post', '/auth/sign-out')
+            .then(() => setUser({ data: null, loading: false }))
+            .catch(error => setUser({ data: null, loading: false, error }))
     }
 
     const pwdReset = () => {}

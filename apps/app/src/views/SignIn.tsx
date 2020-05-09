@@ -5,11 +5,11 @@ import SignInForm from '../components/Input/SignInForm'
 import { useAuth } from '../containers/AuthContext'
 
 const SignIn = () => {
-    const auth = useAuth()
+    const { user, signIn } = useAuth()
 
-    return !auth.user.data ? (
+    return !user.data ? (
         <Segment>
-            <SignInForm onSubmit={auth.signIn} />
+            <SignInForm onSubmit={signIn} />
         </Segment>
     ) : (
         <Redirect to={{ pathname: '/' }} />

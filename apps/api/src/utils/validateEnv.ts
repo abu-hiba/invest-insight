@@ -9,5 +9,7 @@ export default function validateEnv() {
         SESSION_SECRET: str(),
         REDIS_PORT: port(),
         REDIS_HOST: str(),
+        IEX_TOKEN: str(),
+        IEX_URL: str(),
     })
 }

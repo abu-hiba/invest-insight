@@ -1,12 +1,6 @@
 import React, { ReactNode, useState, useEffect, useContext, createContext } from 'react'
 import iiApi from '../services/iiApi' 
-
-export interface User {
-    username: string,
-    email?: string,
-    password?: string,
-    dateCreated?: Date
-}
+import { User } from '../interfaces'
 
 export interface Auth {
     data: User | null,

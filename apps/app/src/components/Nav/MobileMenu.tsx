@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Sidebar, Segment, Menu, Icon, Button } from 'semantic-ui-react'
-import { MenuItem } from './Navbar'
 import { AuthCtx } from '../../containers/AuthContext'
+import { MenuItem } from '../../interfaces'
 
 export interface MobileMenuProps {
     items: MenuItem[],

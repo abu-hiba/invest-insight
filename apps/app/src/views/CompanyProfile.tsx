@@ -1,40 +1,40 @@
 import React from 'react'
-import { Segment } from 'semantic-ui-react'
-
-export interface Company {
-    symbol: string,
-    companyName: string,
-    exchange: string,
-    industry: string,
-    website?: string,
-    description: string,
-    CEO: string,
-    securityName: string,
-    issueType: string,
-    sector: string,
-    primarySicCode: number,
-    employees: number,
-    tags: string[],
-    address: string,
-    address2?: string,
-    state: string,
-    zip: string,
-    country: string,
-    phone: string,
-}
+import { Segment, Placeholder } from 'semantic-ui-react'
+// import { Company } from '../interfaces'
+import { UseCompanyData } from '../containers/IexContainer'
 
 export interface CompanyProfileProps {
-    company: Company
+    company: UseCompanyData
 }
 
 const CompanyProfile = ({ company }: CompanyProfileProps) => {
-    const { symbol, companyName, industry, description } = company
+    const { data, loading, error } = company
     return (
         <Segment>
-            <h2>{symbol}</h2>
-            <h3>{companyName}</h3>
-            <h4>{industry}</h4>
-            <p>{description}</p>
+            {loading ? (
+                <Placeholder>
+                    <Placeholder.Header as='h2'/>
+                    <Placeholder.Header as='h3'/>
+                    <Placeholder.Header as='h4'/>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                    </Placeholder.Paragraph>
+                </Placeholder>
+                ) : error ? (
+                    <>{error.message}</>
+                ) : (
+                    <>
+                        <h2>{data?.symbol}</h2>
+                        <h3>{data?.companyName}</h3>
+                        <h4>{data?.industry}</h4>
+                        <p>{data?.description}</p>
+                    </>
+                )
+            }
         </Segment>
     )
 }

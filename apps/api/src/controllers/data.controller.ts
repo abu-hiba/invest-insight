@@ -17,6 +17,13 @@ export class DataController implements Controller {
             handler: async (req: Request) => (
                 await this.service.getCompanyProfile(req.params.symbol)
             )
+        },
+        {
+            method: 'get',
+            route: '/company/search/:query',
+            handler: async (req: Request) => (
+                await this.service.searchCompanies(req.params.query)
+            )
         }
     ]
 }

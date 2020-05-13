@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { Segment, Menu, Button, Image, Icon, Responsive } from 'semantic-ui-react'
 import SearchField from '../Input/SearchField'
 import { AuthCtx } from '../../containers/AuthContext'
+import { MenuItem } from '../../interfaces'
 
-export interface MenuItem { name: string, path: string } 
 export interface NavbarProps {
     items: MenuItem[],
     auth: AuthCtx,

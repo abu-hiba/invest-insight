@@ -9,9 +9,9 @@ const {
 
 const redisClient = redis.createClient(Number(REDIS_PORT), 'redis')
 
-redisClient.on('error', (err: Error) => {
-  console.error('Redis error: ', err)
-})
+// redisClient.on('error', (err: Error) => {
+//   console.error('Redis error: ', err)
+// })
 
 const RedisStore = connectRedis(session)
 

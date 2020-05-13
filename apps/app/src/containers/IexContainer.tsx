@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import iiApi from '../services/iiApi'
-import { Company } from '../interfaces'
+import { Company, NewsItem } from '../interfaces'
 
 export interface CompanyState {
     data: Company | null,
@@ -37,4 +37,22 @@ export const useSearch = () => {
     }
 
     return { searchState, companySearch }
+}
+
+export interface NewsState {
+    loading: boolean,
+    items?: NewsItem[],
+    error?: Error
+}
+
+export const useCompanyNews = (symbol: string, last: number) => {
+    const [news, setNews] = useState<NewsState>({ loading: true })
+
+    useEffect(() => {
+        iiApi<NewsItem[], null>('get', `/company/news/${symbol}/last/${last}`)
+            .then(items => setNews({ items, loading: false }))
+            .catch(error => setNews({ loading: false, error }))
+    }, [])
+
+    return news
 }

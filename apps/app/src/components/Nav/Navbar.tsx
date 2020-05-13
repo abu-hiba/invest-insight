@@ -4,6 +4,7 @@ import { Segment, Menu, Button, Image, Icon, Responsive } from 'semantic-ui-reac
 import SearchField from '../Input/SearchField'
 import { AuthCtx } from '../../containers/AuthContext'
 import { MenuItem } from '../../interfaces'
+import { NoEmitOnErrorsPlugin } from 'webpack'
 
 export interface NavbarProps {
     items: MenuItem[],
@@ -14,6 +15,7 @@ export interface NavbarProps {
 
 const menuContainer = {
     borderRadius: 0,
+    border: 'none',
     padding: '0.5em 1em',
     margin: 0,
     maxWidth: `${window.screen.width}px`

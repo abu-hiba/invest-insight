@@ -26,7 +26,10 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
     }, [show]) 
 
     return (
-        <Sidebar.Pushable as={Segment} style={{ border: 'none', borderRadius: '0', marginTop: '0' }}>
+        <Sidebar.Pushable
+            as={Segment}
+            style={{ border: 'none', borderRadius: '0', marginTop: '0' }}
+        >
             <Sidebar
                 as={Menu}
                 animation="overlay"

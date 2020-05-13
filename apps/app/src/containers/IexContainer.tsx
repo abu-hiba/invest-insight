@@ -22,17 +22,18 @@ export const useCompany = (symbol: string) => {
 
 export interface SearchState {
     loading: boolean,
-    results: Company[] | null,
+    results?: Company[],
     error?: Error
 }
 
 export const useSearch = () => {
-    const [searchState, setSearchState] = useState<SearchState>({ results: null, loading: true })
+    const [searchState, setSearchState] = useState<SearchState>({ loading: false })
 
     const companySearch = (query: string): void => {
+        setSearchState({ loading: true })
         iiApi<Company[], null>('get', `/company/search/${query}`)
             .then(results => setSearchState({ results, loading: false }))
-            .catch(error => setSearchState({ results: null, loading: false, error }))
+            .catch(error => setSearchState({ loading: false, error }))
     }
 
     return { searchState, companySearch }

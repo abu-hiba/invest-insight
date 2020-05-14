@@ -7,5 +7,5 @@ export interface NewsItem {
     related: string,
     image: string,
     lang: string,
-    hasPaywall: boolean
+    hasPayWall: boolean
 }

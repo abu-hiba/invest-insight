@@ -1,7 +1,6 @@
 import React from 'react'
 import { Segment, Placeholder } from 'semantic-ui-react'
-// import { Company } from '../interfaces'
-import { CompanyState } from '../containers/IexContainer'
+import { CompanyState } from '../../containers/IexContainer'
 
 export interface CompanyProfileProps {
     company: CompanyState

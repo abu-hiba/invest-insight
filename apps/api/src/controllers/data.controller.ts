@@ -1,7 +1,7 @@
 import { Request } from 'express'
-import { Controller } from '../interfaces/controller.interface'
 import { DataService } from '../services/data.service'
 import { Endpoint } from '../routes/router'
+import { Controller, Company, NewsItem } from '../interfaces'
 
 export class DataController implements Controller {
     public service: DataService
@@ -14,16 +14,20 @@ export class DataController implements Controller {
         {
             method: 'get',
             route: '/company/:symbol',
-            handler: async (req: Request) => (
-                await this.service.getCompanyProfile(req.params.symbol)
-            )
+            handler: async ({ params: { symbol } }: Request): Promise<Company> =>
+                await this.service.getCompanyProfile(symbol)
         },
         {
             method: 'get',
             route: '/company/search/:query',
-            handler: async (req: Request) => (
-                await this.service.searchCompanies(req.params.query)
-            )
+            handler: async ({ params: { query } }: Request): Promise<Company[]> =>
+                await this.service.searchCompanies(query)
+        },
+        {
+            method: 'get',
+            route: '/company/news/:symbol/last/:last',
+            handler: async ({ params: { symbol, last } }: Request): Promise<NewsItem[]> =>
+                await this.service.companyNews(symbol, Number(last))
         }
     ]
 }

@@ -7,7 +7,7 @@ import { CompanyNewsItem, NewsItems } from './CompanyNews'
 const CompanyPage: React.FC = () => {
     const { symbol } = useParams() 
     const company = useCompany(symbol!)
-    const news = useCompanyNews(symbol!, 10)
+    const news = useCompanyNews(symbol!, 4)
 
     return (
         <>

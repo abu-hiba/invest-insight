@@ -20,9 +20,7 @@ export class UserService {
             password: bcrypt.hashSync(password, 10)
         })
 
-        await newUser.save()
-
-        return await this.findByUsername(values.username) 
+        return await newUser.save()
     }
 
     public authenticate = async ({ username, password }: { username: string, password: string }) => {

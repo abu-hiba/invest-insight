@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import { ObjectId } from 'mongodb'
 import { User, UserModel } from '../models/user.model'
 
 export class UserService {
@@ -20,24 +21,30 @@ export class UserService {
             password: bcrypt.hashSync(password, 10)
         })
 
-        return await newUser.save()
+        const savedUser = await newUser.save()
+        const { password: _, __v, ...user } = savedUser.toObject()
+        return user
     }
 
     public authenticate = async ({ username, password }: { username: string, password: string }) => {
         const user = await User.findOne({ username })
         if (user && bcrypt.compareSync(password, user.password)) {
-            const { password, ...userWithoutPassword } = user.toObject()
+            const { password, __v, ...userWithoutPassword } = user.toObject()
 
             return userWithoutPassword
-        } 
+        }
+        return null
     }
 
-    public update = async (id: number, userParams: UserModel) => {
+    public update = async (id: ObjectId, userParams: UserModel) => {
         const user = await User.findById(id)
         
         if (!user) throw 'User not found'
         if (user.username !== userParams.username && await User.findOne({ username: userParams.username })) {
             throw `Username ${userParams.username} is already taken`
+        }
+        if (user.email !== userParams.email && await User.findOne({ email: userParams.email })) {
+            throw `Email ${userParams.email} is already taken`
         }
 
         if (userParams.password) {
@@ -46,9 +53,12 @@ export class UserService {
 
         Object.assign(user, userParams)
 
-        await user.save()
+        const savedUser = await user.save()
+        const { password: _, __v, ...updatedUser } = savedUser.toObject()
+        return updatedUser
+
     }
 
-    public findById = async (id: number) => await User.findById(id, '-password')
-    public findByUsername = async (username: string) => await User.findOne({ username }, '-password')
+    public findById = async (id: ObjectId) => await User.findById(id, '_id username email dateCreated')
+    public findByUsername = async (username: string) => await User.findOne({ username }, '_id username email dateCreated')
 }

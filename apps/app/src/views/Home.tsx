@@ -1,8 +1,10 @@
 import React from 'react'
+import MarketSectors from '../components/MarketSectors'
 
 const Home = () => (
     <>
-        <h1>HOME</h1>
+        <h2>Sectors</h2>
+        <MarketSectors />
     </>
 )
 

@@ -20,3 +20,5 @@
     country?: string,
     phone?: string,
 }
+
+export interface Sector { name: string }

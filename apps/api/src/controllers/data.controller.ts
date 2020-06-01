@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { DataService } from '../services/data.service'
 import { Endpoint } from '../routes/router'
-import { Controller, Company, NewsItem } from '../interfaces'
+import { Controller, Company, NewsItem, Sector } from '../interfaces'
 
 export class DataController implements Controller {
     public service: DataService
@@ -28,6 +28,11 @@ export class DataController implements Controller {
             route: '/company/news/:symbol/last/:last',
             handler: async ({ params: { symbol, last } }: Request): Promise<NewsItem[]> =>
                 await this.service.companyNews(symbol, Number(last))
+        },
+        {
+            method: 'get',
+            route: '/sectors',
+            handler: async (): Promise<Sector[]> => await this.service.getSectors()
         }
     ]
 }

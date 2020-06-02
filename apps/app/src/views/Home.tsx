@@ -3,8 +3,6 @@ import MarketSectors from '../components/MarketSectors'
 
 const Home = () => (
     <>
-        <h2>Sectors</h2>
-        <MarketSectors />
     </>
 )
 

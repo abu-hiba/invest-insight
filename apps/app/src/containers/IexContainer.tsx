@@ -67,7 +67,7 @@ export const useMarketRefData = (): RefState => {
     const [refData, setRefData] = useState<RefState>({ loading: true })
 
     useEffect(() => {
-        iiApi<Sector[], null>('get', '/sectors')
+        iiApi<Sector[], null>('get', '/sector/all')
             .then(sectors => setRefData({ sectors, loading: false }))
             .catch(error => setRefData({ loading: false, error }))
     }, [])

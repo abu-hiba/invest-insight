@@ -31,8 +31,14 @@ export class DataController implements Controller {
         },
         {
             method: 'get',
-            route: '/sectors',
+            route: '/sector/all',
             handler: async (): Promise<Sector[]> => await this.service.getSectors()
+        },
+        {
+            method: 'get',
+            route: '/sector/:sector',
+            handler: async ({ params: { sector } }: Request) =>
+                await this.service.companiesBySector(sector)
         }
     ]
 }

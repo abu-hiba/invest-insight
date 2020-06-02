@@ -12,4 +12,7 @@ export class DataService {
         await iexApi<NewsItem[]>(`/stock/${symbol}/news/last/${last}`)
 
     public getSectors = async () => await iexApi<Sector[]>('/ref-data/sectors')
+
+    public companiesBySector = async (sector: string) =>
+        await iexApi(`/stock/market/collection/sector?collectionName=${sector}`) 
 }

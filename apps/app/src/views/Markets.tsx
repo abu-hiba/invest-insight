@@ -4,7 +4,6 @@ import MarketSectors from '../components/MarketSectors'
 
 const Markets = () => (
     <Container>
-        <h2>Sectors</h2>
         <MarketSectors />
     </Container>
 )

@@ -74,3 +74,21 @@ export const useMarketRefData = (): RefState => {
 
     return refData
 }
+
+export interface SectorState {
+    loading: boolean,
+    quotes?: any[], //TODO create quote interface
+    error?: Error
+}
+
+export const useSector = (sector: Sector): SectorState => {
+    const [sectorData, setSectorData] = useState<SectorState>({ loading: true })
+
+    useEffect(() => {
+        iiApi<any[], null>('get', `/sector/${sector}`)
+            .then(quotes => setSectorData({ quotes, loading: false }))
+            .catch(error => setSectorData({ loading: false, error }))
+    }, [])
+
+    return sectorData
+}

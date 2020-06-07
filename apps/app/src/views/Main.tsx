@@ -7,11 +7,13 @@ import NotFound from './NotFound'
 import Profile from './Profile'
 import SignIn from './SignIn'
 import Registration from './Registration'
+import SectorPage from './Sector'
 
 const Main = () => (
     <Switch>
         <Route path='/markets' component={Markets}/>
         <Route path='/company/:symbol' component={CompanyPage}/>
+        <Route path='/sector/:name' component={SectorPage}/>
         <Route path='/profile' component={Profile}/>
         <Route path='/sign-in' component={SignIn}/>
         <Route path='/registration' component={Registration}/>

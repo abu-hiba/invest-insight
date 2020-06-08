@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import iiApi from '../services/iiApi'
-import { Company, NewsItem, Sector } from '../interfaces'
+import { Company, NewsItem, Sector, Quote } from '../interfaces'
 
 export interface CompanyState {
     data: Company | null,
@@ -77,15 +77,15 @@ export const useMarketRefData = (): RefState => {
 
 export interface SectorState {
     loading: boolean,
-    quotes?: any[], //TODO create quote interface
+    quotes?: Quote[],
     error?: Error
 }
 
-export const useSector = (sector: Sector): SectorState => {
+export const useSector = (sectorName: string): SectorState => {
     const [sectorData, setSectorData] = useState<SectorState>({ loading: true })
 
     useEffect(() => {
-        iiApi<any[], null>('get', `/sector/${sector}`)
+        iiApi<Quote[], null>('get', `/sector/${sectorName}`)
             .then(quotes => setSectorData({ quotes, loading: false }))
             .catch(error => setSectorData({ loading: false, error }))
     }, [])

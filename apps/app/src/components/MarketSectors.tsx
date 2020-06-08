@@ -1,16 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Container, Segment } from 'semantic-ui-react'
+import { Container, Segment, Responsive } from 'semantic-ui-react'
+import CSS from 'csstype'
 import { useMarketRefData } from '../containers/IexContainer'
 
-const marketSectorsContainer = {
+interface SectorSegmentProps {
+    name: string,
+    style?: CSS.Properties
+}
+
+const marketSectorsContainer: CSS.Properties = {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'baseline',
     justifyContent: 'space-between'
 }
 
-const MarketSectors = () => {
+const SectorSegment: React.FC<SectorSegmentProps> = ({ name, style }) => {
+    const [hovered, setHovered] = useState(false)
+    return (
+        <Segment
+            raised={hovered}
+            onMouseOver={() => setHovered(true)}
+            onMouseOut={() => setHovered(false)}
+            style={style}
+        >
+            <Link to={`/sector/${name}`}>
+                <h4 style={{ color: `${hovered ? '#000' : '#545454'}` }}>
+                    {name}
+                </h4>
+            </Link>
+        </Segment>
+    )
+}
+
+const MarketSectors: React.FC = () => {
     const { sectors, loading, error } = useMarketRefData()
     return (
         <Container fluid style={{ marginTop: '1em' }}>
@@ -20,14 +44,23 @@ const MarketSectors = () => {
                     ? 'Loading...'
                     : (error
                         ? 'Error loading market sectors'
-                        : sectors?.map(sector =>
-                            <Segment key={sector.name} style={{ margin: '0.3em' }}>
-                                <Link to={`/sector/${sector.name}`}>
-                                    <h4 style={{ color: '#545454' }}>
-                                        {sector.name}
-                                    </h4>
-                                </Link>
-                            </Segment>
+                        : sectors?.map(({ name }) =>
+                            <>
+                                <Responsive
+                                    as={SectorSegment}
+                                    key={name}
+                                    name={name}
+                                    style={{ margin: '0.3em', flexGrow: 1, textAlign: 'center' }}
+                                    minWidth={500}
+                                />
+                                <Responsive
+                                    as={SectorSegment}
+                                    key={name}
+                                    name={name}
+                                    style={{ margin: '0.3em', width: '100%' }}
+                                    maxWidth={500}
+                                />
+                            </>
                         )
                     )
                 }

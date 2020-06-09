@@ -1,7 +1,7 @@
 import iexApi from "../infrastructure/iex/iexApi"
 import { Company, NewsItem, Sector } from "../interfaces"
 
-export class DataService {
+export class IexService {
     public getCompanyProfile = async (symbol: string) =>
         await iexApi<Company>(`/stock/${symbol}/company`)
 

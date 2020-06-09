@@ -1,13 +1,13 @@
 import { Request } from 'express'
-import { DataService } from '../services/data.service'
+import { IexService } from '../services/iex.service'
 import { Endpoint } from '../routes/router'
 import { Controller, Company, NewsItem, Sector } from '../interfaces'
 
-export class DataController implements Controller {
-    public service: DataService
+export class IexController implements Controller {
+    public service: IexService
 
     constructor() {
-        this.service = new DataService
+        this.service = new IexService
     }
 
     public endpoints: Endpoint[] = [

@@ -1,12 +1,43 @@
 import React from 'react'
-import { Segment, Placeholder } from 'semantic-ui-react'
+import { Segment, Placeholder, Image } from 'semantic-ui-react'
+import CSS from 'csstype'
 import { CompanyState } from '../../containers/IexContainer'
 
-export interface CompanyProfileProps {
-    company: CompanyState
+interface CompanyHeaderProps {
+    symbol: string,
+    companyName: string,
+    sector: string,
+    style: CSS.Properties
 }
 
-const CompanyProfile = ({ company }: CompanyProfileProps) => {
+const CompanyHeaderText: CSS.Properties = {
+    marginLeft: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+}
+
+const CompanyHeaderImage: CSS.Properties = {
+    width: '96px',
+    height: 'auto',
+    flexShrink: 0,
+    borderRadius: '5px'
+}
+
+const CompanyHeader: React.FC<CompanyHeaderProps> = ({ symbol, companyName, sector, style }) => (
+    <div style={{ display: 'flex', ...style }}>
+        <img
+            src={`${process.env.LOGO_URL}/${symbol}.png`}
+            style={CompanyHeaderImage}
+        />
+        <div style={CompanyHeaderText}>
+            <h2 style={{ margin: '0 0 10px 0' }}>{symbol} | {companyName}</h2>
+            <h4 style={{ margin: 0 }}>{sector}</h4>
+        </div>
+    </div>
+)
+
+const CompanyProfile: React.FC<{ company: CompanyState }> = ({ company }) => {
     const { data, loading, error } = company
     return (
         <Segment>
@@ -27,9 +58,12 @@ const CompanyProfile = ({ company }: CompanyProfileProps) => {
                     <>{error.message}</>
                 ) : (
                     <>
-                        <h2>{data?.symbol}</h2>
-                        <h3>{data?.companyName}</h3>
-                        <h4>{data?.industry}</h4>
+                        <CompanyHeader
+                            symbol={data!.symbol}
+                            companyName={data!.companyName!}
+                            sector={data!.sector!}
+                            style={{ marginBottom: '10px' }}
+                        />
                         <p>{data?.description}</p>
                     </>
                 )

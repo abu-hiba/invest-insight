@@ -3,21 +3,32 @@ import iiApi from '../services/iiApi'
 import { Company, NewsItem, Sector, Quote } from '../interfaces'
 
 export interface CompanyState {
-    data: Company | null,
+    data?: Company,
     loading: boolean,
     error?: Error
 }
 
 export const useCompany = (symbol: string) => {
-    const [company, setCompany] = useState<CompanyState>({ data: null, loading: true })
+    const [company, setCompany] = useState<CompanyState>({ loading: true })
 
     useEffect(() => {
         iiApi<Company, null>('get', `/company/${symbol}`)
-            .then(data => setCompany({ data, loading: false }))
-            .catch(error => setCompany({ data: null, error, loading: false }))
+        .then((data) => setCompany({ data, loading: false }))
+        .catch(error => setCompany({ error, loading: false }))
     }, [])
 
     return company
+}
+
+export const useCompanyLogo = (symbol: string) => {
+    const [logo, setLogo] = useState<{ url: string }>()
+
+    useEffect(() => {
+        iiApi<{ url: string }, null>('get', `/company/${symbol}/logo`)
+            .then(setLogo)
+    }, [])
+
+    return logo
 }
 
 export interface SearchState {
@@ -49,7 +60,7 @@ export const useCompanyNews = (symbol: string, last: number) => {
     const [news, setNews] = useState<NewsState>({ loading: true })
 
     useEffect(() => {
-        iiApi<NewsItem[], null>('get', `/company/news/${symbol}/last/${last}`)
+        iiApi<NewsItem[], null>('get', `/company/${symbol}/news/last/${last}`)
             .then(items => setNews({ items, loading: false }))
             .catch(error => setNews({ loading: false, error }))
     }, [])

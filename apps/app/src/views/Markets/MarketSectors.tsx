@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Container, Segment, Responsive } from 'semantic-ui-react'
+import { Container, Segment, Responsive, Header } from 'semantic-ui-react'
 import CSS from 'csstype'
-import { useMarketRefData } from '../containers/IexContainer'
+import { useMarketRefData } from '../../containers/IexContainer'
 
 interface SectorSegmentProps {
     name: string,
@@ -12,7 +12,7 @@ interface SectorSegmentProps {
 const marketSectorsContainer: CSS.Properties = {
     display: 'flex',
     flexWrap: 'wrap',
-    alignItems: 'baseline',
+    alignItems: 'stretch',
     justifyContent: 'space-between'
 }
 
@@ -37,9 +37,9 @@ const SectorSegment: React.FC<SectorSegmentProps> = ({ name, style }) => {
 const MarketSectors: React.FC = () => {
     const { sectors, loading, error } = useMarketRefData()
     return (
-        <Container fluid style={{ marginTop: '1em' }}>
-            <h2>Market Sectors</h2>
-            <Container style={marketSectorsContainer}>
+        <Container fluid style={{ margin: '1em 0' }}>
+            <Header as='h2' dividing>Market Sectors</Header>
+            <div style={marketSectorsContainer}>
                 {loading
                     ? 'Loading...'
                     : (error
@@ -48,7 +48,7 @@ const MarketSectors: React.FC = () => {
                             <>
                                 <Responsive
                                     as={SectorSegment}
-                                    key={name}
+                                    key={`${name}_1`}
                                     name={name}
                                     style={{ margin: '0.3em', flexGrow: 1, textAlign: 'center' }}
                                     minWidth={500}
@@ -57,14 +57,14 @@ const MarketSectors: React.FC = () => {
                                     as={SectorSegment}
                                     key={name}
                                     name={name}
-                                    style={{ margin: '0.3em', width: '100%' }}
+                                    style={{ margin: '0.2em', width: '48%'  }}
                                     maxWidth={500}
                                 />
                             </>
                         )
                     )
                 }
-            </Container>
+            </div>
         </Container>
     )
 }

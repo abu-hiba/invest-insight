@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container } from 'semantic-ui-react'
-import MarketSectors from '../components/MarketSectors'
+import MarketSectors from './MarketSectors'
 
 const Markets = () => (
     <Container>

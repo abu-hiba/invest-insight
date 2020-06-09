@@ -64,7 +64,8 @@ module.exports = () => {
             //})
         ],
         devServer: {
-            historyApiFallback: true
+            historyApiFallback: true,
+            // https: true
         },
         devtool: false
     }

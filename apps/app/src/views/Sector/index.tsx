@@ -1,27 +1,66 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Container, Segment } from 'semantic-ui-react'
-import { useSector } from '../../containers/IexContainer'
+import { Container, Card, Image } from 'semantic-ui-react'
+import CSS from 'csstype'
+import { useSector, useCompanyLogo } from '../../containers/IexContainer'
+
+interface SectorCompanyProps {
+    companyName: string,
+    symbol: string,
+    open: number,
+    close: number,
+    high: number,
+    low: number,
+    style: CSS.Properties
+}
+
+const SectorCompany: React.FC<SectorCompanyProps> = ({
+    companyName,
+    symbol,
+    open,
+    close,
+    high,
+    low,
+    style
+}) => (
+    <Card as={Link} to={`/company/${symbol}`} style={style}>
+        <Card.Content>
+            <Image floated='right' size='mini' src={`${process.env.LOGO_URL}/${symbol}.png`}/>
+            <Card.Header>{symbol}</Card.Header>
+            <Card.Description>{companyName}</Card.Description>
+            <p>open: {open} close: {close}</p>
+            <p>low: {low} high: {high}</p>
+        </Card.Content>
+    </Card>
+)
 
 const SectorPage: React.FC = () => {
     const { name } = useParams()
-    const { quotes, loading, error } = useSector(name!)    
+    const { quotes, loading, error } = useSector(name!)
+     
     return (
-        <Container>
+        <Container style={{ margin: '1em 0' }}>
             <h2>{name}</h2>
             <Container>
                 {!loading ? (
-                    error ? error.message
-                        : (quotes?.map(({ symbol, companyName, open, close, high, low }) => (
-                            <Link key={symbol} to={`/company/${symbol}`} style={{ color: '#000' }}>
-                                <Segment style={{ margin: '5px 0' }}>
-                                    <h4>{symbol}</h4>
-                                    <h5>{companyName}</h5>
-                                    <p>open: {open} close: {close}</p>
-                                    <p>low: {low} high: {high}</p>
-                                </Segment>
-                            </Link>
-                        )))
+                    error ? error.message : (
+                        <Card.Group itemsPerRow={4} stackable>
+                            {quotes?.map(({ symbol, companyName, open, close, high, low }, i) =>
+                                i < 100 &&  ( // TODO implement pagination 
+                                    <SectorCompany
+                                        key={symbol}
+                                        companyName={companyName}
+                                        symbol={symbol}
+                                        open={open}
+                                        close={close}
+                                        high={high}
+                                        low={low}
+                                        style={{ margin: '0.5em' }}
+                                    />
+                                )
+                            )}
+                        </Card.Group>
+                    )
                 ) : 'Loading'}
             </Container>
         </Container>

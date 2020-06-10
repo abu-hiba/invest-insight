@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react'
-import { Card, Placeholder, Segment, Header } from 'semantic-ui-react'
+import React, { ReactNode, Fragment } from 'react'
+import { Card, Placeholder, Header } from 'semantic-ui-react'
 
 export interface CompanyNewsItemProps {
     loading: boolean,
@@ -21,27 +21,29 @@ export const CompanyNewsItem: React.FC<CompanyNewsItemProps> = ({
     summary,
     url 
 }) => (
-    loading ?
+    loading ? (
         <Placeholder
             as={Card}
             fluid
         />
-    : 
-        <Card
-            href={url}
-            target="_blank"
-            header={headline}
-            meta={source}
-            description={summary}
-            fluid
-        />
+    ) : (
+        <Card href={url} target="_blank" fluid>
+            <Card.Content>
+                <Card.Header as='h5'>{headline}</Card.Header>
+                <Card.Meta>{source}</Card.Meta>
+                <Card.Description>{summary}</Card.Description>
+            </Card.Content>
+        </Card>
+    )
 )
 
 export const NewsItems: React.FC<{ children: ReactNode }> = ({ children }) => (
-    <Segment>
+    <div style={{ margin: '2em 1em' }}>
         <Header as ='h3'>News</Header>
-        <Segment.Group>
-            {React.Children.map(children, (child, i) => <Segment key={i}>{child}</Segment>)}
-        </Segment.Group>
-    </Segment>
+        <Card.Group>
+            {React.Children.map(children, (child, i) =>
+                <Fragment key={i}>{child}</Fragment>
+            )}
+        </Card.Group>
+    </div>
 )

@@ -15,17 +15,27 @@ const CompanyPage: React.FC = () => {
     const sections = [
         { key: 'Markets', content: 'Markets', href: '/markets' },
         { key: data?.sector, content: data?.sector, href: `/sector/${data?.sector}` },
-        { key: symbol, content: symbol, active: true }
+        { key: symbol, content: symbol?.toUpperCase(), active: true }
     ]
 
     return (
         <div style={{ margin: '1em 0' }}>
-            {data?.sector && <Breadcrumb icon='right angle' sections={sections} style={{ margin: '0 1em' }} />}
+            {data?.sector && (
+                <Breadcrumb
+                    icon='right angle'
+                    sections={sections}
+                    style={{ margin: '0 1em' }}
+                />
+            )}
             <CompanyProfile company={company} />
             <NewsItems>
-                {news?.items?.map(item => (
-                    <CompanyNewsItem key={item.headline} loading={news.loading} {...item} />
-                ))}            
+                {news?.items?.map(item =>
+                    <CompanyNewsItem
+                        key={item.headline}
+                        loading={news.loading}
+                        {...item}
+                    />
+                )}            
             </NewsItems>
         </div>
     )  

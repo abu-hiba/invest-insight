@@ -45,7 +45,6 @@ const CompanyProfile: React.FC<{ company: CompanyState }> = ({ company }) => {
     const { data, loading, error } = company
     return (
         <Segment>
-            {console.log(data)}
             {loading ? (
                 <Placeholder>
                     <Placeholder.Header as='h2'/>

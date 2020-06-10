@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Container, Card, Image, Breadcrumb } from 'semantic-ui-react'
 import CSS from 'csstype'
@@ -36,7 +36,11 @@ const SectorCompany: React.FC<SectorCompanyProps> = ({
 
 const SectorPage: React.FC = () => {
     const { name } = useParams()
-    const { quotes, loading, error } = useSector(name!)
+    const { sectorData: { quotes, loading, error }, companiesBySector } = useSector()
+
+    useEffect(() => {
+        companiesBySector(name)
+    }, [])
 
     const sections = [
         { key: 'Markets', content: 'Markets', href: '/markets' },

@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react'
 import iiApi from '../services/iiApi'
 import { Company, NewsItem, Sector, Quote } from '../interfaces'
 
-export interface CompanyState {
-    data?: Company,
-    loading: boolean,
-    error?: Error
-}
+interface HookState { loading: boolean, error?: Error }
+
+export interface CompanyState extends HookState { data?: Company }
 
 export const useCompany = (symbol: string) => {
     const [company, setCompany] = useState<CompanyState>({ loading: true })
@@ -31,11 +29,7 @@ export const useCompanyLogo = (symbol: string) => {
     return logo
 }
 
-export interface SearchState {
-    loading: boolean,
-    results?: Company[],
-    error?: Error
-}
+interface SearchState extends HookState { results?: Company[] }
 
 export const useSearch = () => {
     const [searchState, setSearchState] = useState<SearchState>({ loading: false })
@@ -50,11 +44,7 @@ export const useSearch = () => {
     return { searchState, companySearch }
 }
 
-export interface NewsState {
-    loading: boolean,
-    items?: NewsItem[],
-    error?: Error
-}
+interface NewsState extends HookState { items?: NewsItem[] }
 
 export const useCompanyNews = (symbol: string, last: number) => {
     const [news, setNews] = useState<NewsState>({ loading: true })
@@ -68,11 +58,7 @@ export const useCompanyNews = (symbol: string, last: number) => {
     return news
 }
 
-export interface RefState {
-    loading: boolean,
-    sectors?: Sector[],
-    error?: Error
-}
+interface RefState extends HookState { sectors?: Sector[] }
 
 export const useMarketRefData = (): RefState => {
     const [refData, setRefData] = useState<RefState>({ loading: true })
@@ -86,20 +72,16 @@ export const useMarketRefData = (): RefState => {
     return refData
 }
 
-export interface SectorState {
-    loading: boolean,
-    quotes?: Quote[],
-    error?: Error
-}
+interface SectorState extends HookState { quotes?: Quote[] }
 
-export const useSector = (sectorName: string): SectorState => {
+export const useSector = (): { sectorData: SectorState, companiesBySector: Function } => {
     const [sectorData, setSectorData] = useState<SectorState>({ loading: true })
 
-    useEffect(() => {
+    const companiesBySector = (sectorName: string): void => {
         iiApi<Quote[], null>('get', `/sector/${sectorName}`)
             .then(quotes => setSectorData({ quotes, loading: false }))
             .catch(error => setSectorData({ loading: false, error }))
-    }, [])
+    }
 
-    return sectorData
+    return { sectorData, companiesBySector }
 }

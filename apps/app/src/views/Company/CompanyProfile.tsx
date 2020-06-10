@@ -32,7 +32,7 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ symbol, companyName, indu
             style={CompanyHeaderImage}
         />
         <div style={CompanyHeaderText}>
-            <Header as='h2' style={{ margin: '0 0 10px 0' }}>
+            <Header as='h3' style={{ margin: '0 0 10px 0' }}>
                 {symbol}{' '}|{' '}
                 <span style={{ color: '#545454' }}>{companyName}</span>
             </Header>

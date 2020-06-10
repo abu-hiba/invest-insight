@@ -1,8 +1,8 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Container, Card, Image } from 'semantic-ui-react'
+import { Container, Card, Image, Breadcrumb } from 'semantic-ui-react'
 import CSS from 'csstype'
-import { useSector, useCompanyLogo } from '../../containers/IexContainer'
+import { useSector } from '../../containers/IexContainer'
 
 interface SectorCompanyProps {
     companyName: string,
@@ -37,9 +37,15 @@ const SectorCompany: React.FC<SectorCompanyProps> = ({
 const SectorPage: React.FC = () => {
     const { name } = useParams()
     const { quotes, loading, error } = useSector(name!)
+
+    const sections = [
+        { key: 'Markets', content: 'Markets', href: '/markets' },
+        { key: name, content: name, active: true }
+    ]
      
     return (
         <Container style={{ margin: '1em 0' }}>
+            {name && <Breadcrumb icon='right angle' sections={sections} />}
             <h2>{name}</h2>
             <Container>
                 {!loading ? (

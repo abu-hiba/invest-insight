@@ -1,14 +1,7 @@
 import React from 'react'
-import { Segment, Placeholder, Image } from 'semantic-ui-react'
+import { Segment, Placeholder, Header, Image } from 'semantic-ui-react'
 import CSS from 'csstype'
 import { CompanyState } from '../../containers/IexContainer'
-
-interface CompanyHeaderProps {
-    symbol: string,
-    companyName: string,
-    sector: string,
-    style: CSS.Properties
-}
 
 const CompanyHeaderText: CSS.Properties = {
     marginLeft: '10px',
@@ -18,21 +11,32 @@ const CompanyHeaderText: CSS.Properties = {
 }
 
 const CompanyHeaderImage: CSS.Properties = {
-    width: '96px',
-    height: 'auto',
+    // width: '96px',
+    // height: 'auto',
     flexShrink: 0,
     borderRadius: '5px'
 }
 
-const CompanyHeader: React.FC<CompanyHeaderProps> = ({ symbol, companyName, sector, style }) => (
+interface CompanyHeaderProps {
+    symbol: string,
+    companyName: string,
+    industry: string,
+    style: CSS.Properties
+}
+
+const CompanyHeader: React.FC<CompanyHeaderProps> = ({ symbol, companyName, industry, style }) => (
     <div style={{ display: 'flex', ...style }}>
-        <img
+        <Image
             src={`${process.env.LOGO_URL}/${symbol}.png`}
+            size='tiny'
             style={CompanyHeaderImage}
         />
         <div style={CompanyHeaderText}>
-            <h2 style={{ margin: '0 0 10px 0' }}>{symbol} | {companyName}</h2>
-            <h4 style={{ margin: 0 }}>{sector}</h4>
+            <Header as='h2' style={{ margin: '0 0 10px 0' }}>
+                {symbol}{' '}|{' '}
+                <span style={{ color: '#545454' }}>{companyName}</span>
+            </Header>
+            <Header sub style={{ margin: '0' }}>{industry}</Header>
         </div>
     </div>
 )
@@ -41,6 +45,7 @@ const CompanyProfile: React.FC<{ company: CompanyState }> = ({ company }) => {
     const { data, loading, error } = company
     return (
         <Segment>
+            {console.log(data)}
             {loading ? (
                 <Placeholder>
                     <Placeholder.Header as='h2'/>
@@ -61,7 +66,7 @@ const CompanyProfile: React.FC<{ company: CompanyState }> = ({ company }) => {
                         <CompanyHeader
                             symbol={data!.symbol}
                             companyName={data!.companyName!}
-                            sector={data!.sector!}
+                            industry={data!.industry!}
                             style={{ marginBottom: '10px' }}
                         />
                         <p>{data?.description}</p>

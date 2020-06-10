@@ -45,22 +45,20 @@ const MarketSectors: React.FC = () => {
                     : (error
                         ? 'Error loading market sectors'
                         : sectors?.map(({ name }) =>
-                            <>
+                            <React.Fragment key={name}>
                                 <Responsive
                                     as={SectorSegment}
-                                    key={`${name}_1`}
                                     name={name}
                                     style={{ margin: '0.3em', flexGrow: 1, textAlign: 'center' }}
                                     minWidth={500}
                                 />
                                 <Responsive
                                     as={SectorSegment}
-                                    key={name}
                                     name={name}
                                     style={{ margin: '0.2em', width: '48%'  }}
                                     maxWidth={500}
                                 />
-                            </>
+                            </React.Fragment>
                         )
                     )
                 }

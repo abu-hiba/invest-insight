@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import iiApi from '../services/iiApi'
 import { Company, NewsItem, Sector, Quote } from '../interfaces'
+import IndexedDBWorker from '../services/indexedDB'
 
 interface HookState { loading: boolean, error?: Error }
 
@@ -63,11 +64,27 @@ interface RefState extends HookState { sectors?: Sector[] }
 export const useMarketRefData = (): RefState => {
     const [refData, setRefData] = useState<RefState>({ loading: true })
 
+    const db = new IndexedDBWorker
+
     useEffect(() => {
-        iiApi<Sector[], null>('get', '/sector/all')
-            .then(sectors => setRefData({ sectors, loading: false }))
-            .catch(error => setRefData({ loading: false, error }))
+        db.find({ store: 'markets', key: 'sectors' })
+            .then(sectors => {
+                setRefData({ sectors: sectors as Sector[], loading: false })
+            })
+            .catch(() => {
+                fetchMarketSectors()
+            })
     }, [])
+
+    const fetchMarketSectors = () => {
+        iiApi<Sector[], null>('get', '/sector/all')
+            .then(sectors => {
+                setRefData({ sectors, loading: false })
+                
+                db.save({ store: 'markets', key: 'sectors', data: sectors })
+            })
+            .catch(error => setRefData({ loading: false, error }))
+    }
 
     return refData
 }
@@ -79,7 +96,9 @@ export const useSector = (): { sectorData: SectorState, companiesBySector: Funct
 
     const companiesBySector = (sectorName: string): void => {
         iiApi<Quote[], null>('get', `/sector/${sectorName}`)
-            .then(quotes => setSectorData({ quotes, loading: false }))
+            .then(quotes => {
+                setSectorData({ quotes, loading: false })
+            })
             .catch(error => setSectorData({ loading: false, error }))
     }
 

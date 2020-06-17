@@ -1,5 +1,11 @@
 type DBVersionChangeEvent = IDBVersionChangeEvent & { target: { result: IDBDatabase } }
 
+interface Payload<T = {}> {
+    key: string,
+    store: string,
+    data?: T
+}
+
 const dbName = 'InvestInsight'
 
 self.onmessage = (event: MessageEvent) => handleRequest(event)
@@ -15,6 +21,9 @@ const handleRequest = ({ data: { type, payload } }: MessageEvent) => {
         case 'createStore':
             createStore(payload.store)
         break
+        case 'delete':
+            deleteFromDB(payload)
+        break
     }
 }
 
@@ -25,39 +34,41 @@ const createStore = (newStore: string) => {
 
             const db = event.target.result
             const version = db.version
+            const upgradeNeeded = !db.objectStoreNames.contains(newStore)
             db.close()
 
-            const req = indexedDB.open(dbName, version+1)
+            if (upgradeNeeded) {
+                const req = indexedDB.open(dbName, version+1)
 
-            req.onupgradeneeded = function (e) {
-                const event = e as DBVersionChangeEvent
+                req.onupgradeneeded = function (e) {
+                    const event = e as DBVersionChangeEvent
 
-                const upgradeDB = event.target.result
-                upgradeDB.createObjectStore(newStore, { autoIncrement: true })
-            }
+                    const upgradeDB = event.target.result
+                    upgradeDB.createObjectStore(newStore, { autoIncrement: true })
+                }
 
-            req.onsuccess = () => {
-                self.postMessage('DB upgraded')
-                event.target.result.close()
-            }
-            req.onerror = () => {
-                self.postMessage('DB upgrade error')
-                event.target.result.close()
+                req.onsuccess = () => {
+                    self.postMessage('DB upgraded')
+                    event.target.result.close()
+                }
+                req.onerror = () => {
+                    self.postMessage('DB upgrade error')
+                    event.target.result.close()
+                }
             }
         }
 }
 
-const saveToDB = ({ store, key, data }: { store: string, key: string, data: any }) => {
+const saveToDB = <T>({ store, key, data }: Payload<T>) => {
     indexedDB.open(dbName)
         .onsuccess = e => {
             const event = e as DBVersionChangeEvent
-
             const db = event.target.result
 
             const req = db
                 .transaction([store], 'readwrite')
                 .objectStore(store)
-                .add(data, key)
+                .add({ data, date: Date.now() }, key)
 
             req.onsuccess = () => {
                 self.postMessage(`Successfully added to ${store}`)
@@ -70,24 +81,47 @@ const saveToDB = ({ store, key, data }: { store: string, key: string, data: any 
         }
 }
 
-const findInDB = ({ store, key }: { store: string, key: string }) => {
+const findInDB = ({ store, key }: Payload) => {
     indexedDB.open(dbName)
         .onsuccess = e => {
             const event = e as DBVersionChangeEvent
-
             const db = event.target.result
 
-            const findReq = db
+            const req = db
                 .transaction([store])
                 .objectStore(store)
                 .get(key)
 
-            findReq.onsuccess = () => {
-                self.postMessage(findReq.result)
+            req.onsuccess = () => {
+                req.result
+                    ? self.postMessage(req.result)
+                    : self.postMessage('Key not found') 
                 db.close()
             }
-            findReq.onerror = () => {
+            req.onerror = () => {
                 self.postMessage('Key not found')
+                db.close()
+            }
+        }
+}
+
+const deleteFromDB = ({ store, key }: Payload) => {
+    indexedDB.open(dbName)
+        .onsuccess = e => {
+            const event = e as DBVersionChangeEvent
+            const db = event.target.result
+
+            const req = db
+                .transaction([store], 'readwrite')
+                .objectStore(store)
+                .delete(key)
+
+            req.onsuccess = () => {
+                self.postMessage(`${key} deleted from ${store}`)
+                db.close()
+            }
+            req.onerror = () => {
+                self.postMessage(`Error deleting ${key} from ${store}`)
                 db.close()
             }
         }

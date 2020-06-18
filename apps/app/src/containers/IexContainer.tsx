@@ -91,13 +91,27 @@ export const useMarketRefData = (): RefState => {
 
 interface SectorState extends HookState { quotes?: Quote[] }
 
-export const useSector = (): { sectorData: SectorState, companiesBySector: Function } => {
+export const useSector = (sectorName: string): { sectorData: SectorState, companiesBySector: Function } => {
     const [sectorData, setSectorData] = useState<SectorState>({ loading: true })
+
+    const db = new IndexedDBWorker
+
+    useEffect(() => {
+        db.find({ store: 'sectors', key: sectorName })
+            .then(quotes => {
+                setSectorData({ quotes: quotes as Quote[], loading: false })
+            })
+            .catch(() => {
+                companiesBySector(sectorName)
+            })
+    }, [])
 
     const companiesBySector = (sectorName: string): void => {
         iiApi<Quote[], null>('get', `/sector/${sectorName}`)
             .then(quotes => {
                 setSectorData({ quotes, loading: false })
+
+                db.save({ store: 'sectors', key: sectorName, data: quotes })
             })
             .catch(error => setSectorData({ loading: false, error }))
     }

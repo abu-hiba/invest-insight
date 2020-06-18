@@ -31,17 +31,16 @@ export default class IndexedDBWorker {
         this.worker.postMessage({ type: 'find', payload })
         
         return new Promise((resolve, reject) => {
-            this.worker.onmessage = e => {
-                const ageInHrs = (Date.now() - e.data.date) / (1000 * 60 * 60)
-                console.log(ageInHrs)
+            this.worker.onmessage = ({ data: { data, date } }) => {
+                const ageInHrs = (Date.now() - date) / (1000 * 60 * 60)
 
                 if (ageInHrs > 24) {
                     this.delete(payload)
                     reject(`${payload.key} needs to be updated`)
                 }
 
-                e.data && e.data != 'Key not found'
-                    ? resolve(e.data.data)
+                data && data != 'Key not found'
+                    ? resolve(data)
                     : reject(`${payload.key} not found in ${payload.store}`)
             }
         })

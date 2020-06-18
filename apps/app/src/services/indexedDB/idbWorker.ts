@@ -1,16 +1,21 @@
 type DBVersionChangeEvent = IDBVersionChangeEvent & { target: { result: IDBDatabase } }
+type DBRequest = 'add' | 'find' | 'createStore' | 'delete' 
 
 interface Payload<T = {}> {
     key: string,
     store: string,
     data?: T
+    newStores: string[]
 }
 
 const dbName = 'InvestInsight'
 
-self.onmessage = (event: MessageEvent) => handleRequest(event)
+self.onmessage = (event: MessageEvent) => {
+    const { data: { type, payload } } = event
+    handleRequest(type, payload)
+}
 
-const handleRequest = ({ data: { type, payload } }: MessageEvent) => {
+const handleRequest = (type: DBRequest, payload: Payload) => {
     switch (type) {
         case 'add':
             saveToDB(payload)
@@ -19,7 +24,7 @@ const handleRequest = ({ data: { type, payload } }: MessageEvent) => {
             findInDB(payload)
         break
         case 'createStore':
-            createStore(payload.store)
+            createStore(payload.newStores)
         break
         case 'delete':
             deleteFromDB(payload)
@@ -27,24 +32,29 @@ const handleRequest = ({ data: { type, payload } }: MessageEvent) => {
     }
 }
 
-const createStore = (newStore: string) => {
+const createStore = (stores: string[]) => {
     indexedDB.open(dbName)
         .onsuccess = (e) => {
             const event = e as DBVersionChangeEvent
 
             const db = event.target.result
             const version = db.version
-            const upgradeNeeded = !db.objectStoreNames.contains(newStore)
+
+            const newStores = stores.filter(store =>
+                !db.objectStoreNames.contains(store)
+            )
             db.close()
 
-            if (upgradeNeeded) {
+            if (newStores.length) {
                 const req = indexedDB.open(dbName, version+1)
 
                 req.onupgradeneeded = function (e) {
                     const event = e as DBVersionChangeEvent
 
                     const upgradeDB = event.target.result
-                    upgradeDB.createObjectStore(newStore, { autoIncrement: true })
+                    newStores.forEach(newStore => {
+                        upgradeDB.createObjectStore(newStore, { autoIncrement: true })
+                    })
                 }
 
                 req.onsuccess = () => {

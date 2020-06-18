@@ -16,7 +16,7 @@ export default class IndexedDBWorker {
     }
 
     public initWorker = () => {
-        this.createStore('markets')
+        this.createStore(['markets', 'sectors'])
         
         this.worker.onmessage = e => {
             this.data = e.data
@@ -46,8 +46,8 @@ export default class IndexedDBWorker {
         })
     }
 
-    public createStore = (store: string) => {
-        this.worker.postMessage({ type: 'createStore', payload: { store } })
+    public createStore = (newStores: string[]) => {
+        this.worker.postMessage({ type: 'createStore', payload: { newStores } })
     }
 
     public delete = (payload: Payload) => {

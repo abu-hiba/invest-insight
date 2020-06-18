@@ -36,11 +36,7 @@ const SectorCompany: React.FC<SectorCompanyProps> = ({
 
 const SectorPage: React.FC = () => {
     const { name } = useParams()
-    const { sectorData: { quotes, loading, error }, companiesBySector } = useSector()
-
-    useEffect(() => {
-        companiesBySector(name)
-    }, [])
+    const { sectorData: { quotes, loading, error } } = useSector(name!)
 
     const sections = [
         { key: 'Markets', content: 'Markets', href: '/markets' },
@@ -56,18 +52,16 @@ const SectorPage: React.FC = () => {
                     error ? error.message : (
                         <Card.Group itemsPerRow={4} stackable>
                             {quotes?.map(({ symbol, companyName, open, close, high, low }, i) =>
-                                i < 100 &&  ( // TODO implement pagination 
-                                    <SectorCompany
-                                        key={symbol}
-                                        companyName={companyName}
-                                        symbol={symbol}
-                                        open={open}
-                                        close={close}
-                                        high={high}
-                                        low={low}
-                                        style={{ margin: '0.5em' }}
-                                    />
-                                )
+                                <SectorCompany
+                                    key={symbol}
+                                    companyName={companyName}
+                                    symbol={symbol}
+                                    open={open}
+                                    close={close}
+                                    high={high}
+                                    low={low}
+                                    style={{ margin: '0.5em' }}
+                                />
                             )}
                         </Card.Group>
                     )

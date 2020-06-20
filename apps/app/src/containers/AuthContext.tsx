@@ -24,7 +24,7 @@ const AuthContext = createContext<AuthCtx>({
     pwdReset: () => {}
 })
 
-export const ProvideAuth = ({ children }: { children: ReactNode }) => {
+export const ProvideAuth: React.FC<{ children: ReactNode }> = ({ children }) => {
     const auth = useProvideAuth()
     return (
         <AuthContext.Provider value={auth}>

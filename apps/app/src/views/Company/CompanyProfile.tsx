@@ -1,12 +1,47 @@
 import React from 'react'
-import { Segment, Placeholder } from 'semantic-ui-react'
+import { Segment, Placeholder, Header, Image } from 'semantic-ui-react'
+import CSS from 'csstype'
 import { CompanyState } from '../../containers/IexContainer'
 
-export interface CompanyProfileProps {
-    company: CompanyState
+const CompanyHeaderText: CSS.Properties = {
+    marginLeft: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
 }
 
-const CompanyProfile = ({ company }: CompanyProfileProps) => {
+const CompanyHeaderImage: CSS.Properties = {
+    // width: '96px',
+    // height: 'auto',
+    flexShrink: 0,
+    borderRadius: '5px'
+}
+
+interface CompanyHeaderProps {
+    symbol: string,
+    companyName: string,
+    industry: string,
+    style: CSS.Properties
+}
+
+const CompanyHeader: React.FC<CompanyHeaderProps> = ({ symbol, companyName, industry, style }) => (
+    <div style={{ display: 'flex', ...style }}>
+        <Image
+            src={`${process.env.LOGO_URL}/${symbol}.png`}
+            size='tiny'
+            style={CompanyHeaderImage}
+        />
+        <div style={CompanyHeaderText}>
+            <Header as='h3' style={{ margin: '0 0 10px 0' }}>
+                {symbol}{' '}|{' '}
+                <span style={{ color: '#545454' }}>{companyName}</span>
+            </Header>
+            <Header sub style={{ margin: '0' }}>{industry}</Header>
+        </div>
+    </div>
+)
+
+const CompanyProfile: React.FC<{ company: CompanyState }> = ({ company }) => {
     const { data, loading, error } = company
     return (
         <Segment>
@@ -27,9 +62,12 @@ const CompanyProfile = ({ company }: CompanyProfileProps) => {
                     <>{error.message}</>
                 ) : (
                     <>
-                        <h2>{data?.symbol}</h2>
-                        <h3>{data?.companyName}</h3>
-                        <h4>{data?.industry}</h4>
+                        <CompanyHeader
+                            symbol={data!.symbol}
+                            companyName={data!.companyName!}
+                            industry={data!.industry!}
+                            style={{ marginBottom: '10px' }}
+                        />
                         <p>{data?.description}</p>
                     </>
                 )

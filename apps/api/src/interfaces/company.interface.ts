@@ -20,3 +20,14 @@
     country?: string,
     phone?: string,
 }
+
+export interface Sector { name: string }
+
+export interface Quote {
+    symbol: string,
+    companyName: string,
+    open: number,
+    close: number,
+    high: number,
+    low: number
+}

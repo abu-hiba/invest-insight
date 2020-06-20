@@ -12,6 +12,12 @@ module.exports = () => {
     }, {})
 
     return {
+        resolve: {
+            alias: {
+                "../../theme.config$": path.join(__dirname, "/semantic-ui/theme.config"),
+                "../semantic-ui/site": path.join(__dirname, "/semantic-ui/site")
+            }
+        },
         mode: 'production',
         entry: './src/index.tsx',
         resolve: {
@@ -26,8 +32,8 @@ module.exports = () => {
                     exclude: path.resolve(__dirname, 'node_modules')
                 },
                 {
-                    test: /\.css$/i,
-                    use: ['style-loader', 'css-loader'],
+                    test: /\.s[ac]ss$/i,
+                    use: ['style-loader', 'css-loader', 'sass-loader'],
                     exclude: '/node_modules/'
                 },
                 {
@@ -58,7 +64,8 @@ module.exports = () => {
             //})
         ],
         devServer: {
-            historyApiFallback: true
+            historyApiFallback: true,
+            // https: true
         },
         devtool: false
     }

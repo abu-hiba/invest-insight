@@ -29,6 +29,7 @@ const SearchField = (props: SearchFieldProps) => {
             onResultSelect={handleResultSelect}
             loading={loading}
             results={searchResults}
+            showNoResults={false}
             {...props}
         />
     )

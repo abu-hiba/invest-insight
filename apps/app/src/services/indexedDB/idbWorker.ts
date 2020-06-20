@@ -34,7 +34,7 @@ const handleRequest = (type: DBRequest, payload: Payload) => {
 
 const createStore = (stores: string[]) => {
     indexedDB.open(dbName)
-        .onsuccess = (e) => {
+        .onsuccess = e => {
             const event = e as DBVersionChangeEvent
 
             const db = event.target.result

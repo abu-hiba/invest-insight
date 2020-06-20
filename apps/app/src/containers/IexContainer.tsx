@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import iiApi from '../services/iiApi'
 import { Company, NewsItem, Sector, Quote } from '../interfaces'
-import IndexedDBWorker from '../services/indexedDB'
+import { useIDB } from './IDBContext'
 
 interface HookState { loading: boolean, error?: Error }
 
@@ -64,10 +64,10 @@ interface RefState extends HookState { sectors?: Sector[] }
 export const useMarketRefData = (): RefState => {
     const [refData, setRefData] = useState<RefState>({ loading: true })
 
-    const db = new IndexedDBWorker
+    const db = useIDB()
 
     useEffect(() => {
-        db.find({ store: 'markets', key: 'sectors' })
+        db?.find({ store: 'markets', key: 'sectors' })
             .then(sectors => {
                 setRefData({ sectors: sectors as Sector[], loading: false })
             })
@@ -81,7 +81,7 @@ export const useMarketRefData = (): RefState => {
             .then(sectors => {
                 setRefData({ sectors, loading: false })
                 
-                db.save({ store: 'markets', key: 'sectors', data: sectors })
+                db?.save({ store: 'markets', key: 'sectors', data: sectors })
             })
             .catch(error => setRefData({ loading: false, error }))
     }
@@ -94,10 +94,10 @@ interface SectorState extends HookState { quotes?: Quote[] }
 export const useSector = (sectorName: string): { sectorData: SectorState, companiesBySector: Function } => {
     const [sectorData, setSectorData] = useState<SectorState>({ loading: true })
 
-    const db = new IndexedDBWorker
+    const db = useIDB()
 
     useEffect(() => {
-        db.find({ store: 'sectors', key: sectorName })
+        db?.find({ store: 'sectors', key: sectorName })
             .then(quotes => {
                 setSectorData({ quotes: quotes as Quote[], loading: false })
             })
@@ -111,7 +111,7 @@ export const useSector = (sectorName: string): { sectorData: SectorState, compan
             .then(quotes => {
                 setSectorData({ quotes, loading: false })
 
-                db.save({ store: 'sectors', key: sectorName, data: quotes })
+                db?.save({ store: 'sectors', key: sectorName, data: quotes })
             })
             .catch(error => setSectorData({ loading: false, error }))
     }

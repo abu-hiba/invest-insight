@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Container, Card, Image, Breadcrumb } from 'semantic-ui-react'
+import LazyLoad from 'react-lazyload'
 import CSS from 'csstype'
 import { useSector } from '../../containers/IexContainer'
 
@@ -25,7 +26,9 @@ const SectorCompany: React.FC<SectorCompanyProps> = ({
 }) => (
     <Card as={Link} to={`/company/${symbol}`} style={style}>
         <Card.Content>
-            <Image floated='right' size='mini' src={`${process.env.LOGO_URL}/${symbol}.png`}/>
+            <LazyLoad once={true}>
+                <Image floated='right' size='mini' src={`${process.env.LOGO_URL}/${symbol}.png`}/>
+            </LazyLoad>
             <Card.Header>{symbol}</Card.Header>
             <Card.Description>{companyName}</Card.Description>
             <p>open: {open} close: {close}</p>
@@ -51,17 +54,13 @@ const SectorPage: React.FC = () => {
                 {!loading ? (
                     error ? error.message : (
                         <Card.Group itemsPerRow={4} stackable>
-                            {quotes?.map(({ symbol, companyName, open, close, high, low }, i) =>
-                                <SectorCompany
-                                    key={symbol}
-                                    companyName={companyName}
-                                    symbol={symbol}
-                                    open={open}
-                                    close={close}
-                                    high={high}
-                                    low={low}
-                                    style={{ margin: '0.5em' }}
-                                />
+                            {quotes?.map((quote, i) =>
+                                i < 50 && 
+                                    <SectorCompany
+                                        key={quote.symbol}
+                                        {...quote}
+                                        style={{ margin: '0.5em' }}
+                                    />
                             )}
                         </Card.Group>
                     )

@@ -1,4 +1,5 @@
 import React, { MouseEvent, SyntheticEvent } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Search, SearchProps, SearchResultData } from 'semantic-ui-react'
 import { useSearch } from '../../containers/IexContainer'
 
@@ -6,6 +7,7 @@ export interface SearchFieldProps extends SearchProps { }
 
 const SearchField = (props: SearchFieldProps) => {
     const { searchState: { results, loading }, companySearch } = useSearch()
+    let history = useHistory()
 
     const searchResults = results?.map(({ symbol, securityName }) => (
         {
@@ -19,8 +21,7 @@ const SearchField = (props: SearchFieldProps) => {
     }
 
     const handleResultSelect = (e: SyntheticEvent, { result }: SearchResultData) => {
-        const url = `${process.env.HOST_URL}/company/${result.title}`
-        location.href = url
+        history.push(`/company/${result.title}`)
     }
 
     return (

@@ -59,6 +59,6 @@ export class UserService {
 
     }
 
-    public findById = async (id: ObjectId) => await User.findById(id, '_id username email dateCreated')
-    public findByUsername = async (username: string) => await User.findOne({ username }, '_id username email dateCreated')
+    public findById = async (id: ObjectId) => await User.findById(id, '-password')
+    public findByUsername = async (username: string) => await User.findOne({ username }, '-password')
 }

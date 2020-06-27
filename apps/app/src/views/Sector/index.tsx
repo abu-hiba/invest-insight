@@ -18,10 +18,6 @@ interface SectorCompanyProps {
 const SectorCompany: React.FC<SectorCompanyProps> = ({
     companyName,
     symbol,
-    open,
-    close,
-    high,
-    low,
     style
 }) => (
     <Card as={Link} to={`/company/${symbol}`} style={style}>
@@ -31,8 +27,6 @@ const SectorCompany: React.FC<SectorCompanyProps> = ({
             </LazyLoad>
             <Card.Header>{symbol}</Card.Header>
             <Card.Description>{companyName}</Card.Description>
-            <p>open: {open} close: {close}</p>
-            <p>low: {low} high: {high}</p>
         </Card.Content>
     </Card>
 )

@@ -10,13 +10,16 @@ export interface CompanyState extends HookState { data?: Company }
 export const useCompany = (symbol: string) => {
     const [company, setCompany] = useState<CompanyState>({ loading: true })
 
+    const fetchCompany = (symbol: string) =>
+        iiApi<Company>('get', `/company/${symbol}`)
+            .then((data) => setCompany({ data, loading: false }))
+            .catch(error => setCompany({ error, loading: false }))
+
     useEffect(() => {
-        iiApi<Company, null>('get', `/company/${symbol}`)
-        .then((data) => setCompany({ data, loading: false }))
-        .catch(error => setCompany({ error, loading: false }))
+        fetchCompany(symbol)
     }, [])
 
-    return company
+    return { company, fetchCompany }
 }
 
 export const useCompanyLogo = (symbol: string) => {
@@ -37,7 +40,7 @@ export const useSearch = () => {
 
     const companySearch = (query: string): void => {
         setSearchState({ loading: true })
-        iiApi<Company[], null>('get', `/company/search/${query}`)
+        iiApi<Company[]>('get', `/company/search/${query}`)
             .then(results => setSearchState({ results, loading: false }))
             .catch(error => setSearchState({ loading: false, error }))
     }
@@ -45,18 +48,21 @@ export const useSearch = () => {
     return { searchState, companySearch }
 }
 
-interface NewsState extends HookState { items?: NewsItem[] }
+export interface NewsState extends HookState { items?: NewsItem[] }
 
 export const useCompanyNews = (symbol: string, last: number) => {
     const [news, setNews] = useState<NewsState>({ loading: true })
 
-    useEffect(() => {
-        iiApi<NewsItem[], null>('get', `/company/${symbol}/news/last/${last}`)
+    const fetchNews = (symbol: string, last: number) =>
+        iiApi<NewsItem[]>('get', `/company/${symbol}/news/last/${last}`)
             .then(items => setNews({ items, loading: false }))
             .catch(error => setNews({ loading: false, error }))
+
+    useEffect(() => {
+        fetchNews(symbol, last)
     }, [])
 
-    return news
+    return { news, fetchNews }
 }
 
 interface RefState extends HookState { sectors?: Sector[] }
@@ -77,7 +83,7 @@ export const useMarketRefData = (): RefState => {
     }, [])
 
     const fetchMarketSectors = () => {
-        iiApi<Sector[], null>('get', '/sector/all')
+        iiApi<Sector[]>('get', '/sector/all')
             .then(sectors => {
                 setRefData({ sectors, loading: false })
                 
@@ -107,7 +113,7 @@ export const useSector = (sectorName: string): { sectorData: SectorState, compan
     }, [])
 
     const companiesBySector = (sectorName: string): void => {
-        iiApi<Quote[], null>('get', `/sector/${sectorName}`)
+        iiApi<Quote[]>('get', `/sector/${sectorName}`)
             .then(quotes => {
                 setSectorData({ quotes, loading: false })
 
@@ -117,4 +123,22 @@ export const useSector = (sectorName: string): { sectorData: SectorState, compan
     }
 
     return { sectorData, companiesBySector }
+}
+
+export const useEventStream = () => {
+    const [event, setEvent] = useState<Quote>()
+
+    let sse: EventSource
+
+    const openStream = (symbols: string[]) => {
+        sse = new EventSource(`${process.env.API_URL}/sse/stocks/${symbols.join()}`)
+        sse.onmessage = e => {
+            const result = JSON.parse(e.data)[0]
+            result && setEvent(result)
+        }
+    }
+
+    const closeStream = () => sse.close()
+
+    return { openStream, closeStream, event }
 }

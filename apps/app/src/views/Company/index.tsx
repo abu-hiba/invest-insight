@@ -1,32 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Breadcrumb } from 'semantic-ui-react'
 import CompanyProfile from './CompanyProfile'
-import { useCompany, useCompanyNews } from '../../containers/IexContainer'
+import { useCompany, useCompanyNews, useEventStream } from '../../containers/IexContainer'
 import { CompanyNewsItem, NewsItems } from './CompanyNews'
+import CompanyHeader from './CompanyHeader'
+import CompanyBreadcrumb from './CompanyBreadcrumb'
+import AddToWatchlist from './AddToWatchlist'
 
 const CompanyPage: React.FC = () => {
     const { symbol } = useParams() 
-    const company = useCompany(symbol!)
-    const news = useCompanyNews(symbol!, 4)
+    const { company, fetchCompany } = useCompany(symbol!)
+    const { news, fetchNews } = useCompanyNews(symbol!, 4)
+    const { openStream, closeStream, event } = useEventStream()
+
+    useEffect(() => {
+        fetchCompany(symbol!)
+        fetchNews(symbol!, 4)
+        openStream([symbol!])
+
+        return closeStream
+    }, [symbol])
 
     const { data } = company
 
     const sections = [
-        { key: 'Markets', content: 'Markets', href: '/markets' },
-        { key: data?.sector, content: data?.sector, href: `/sector/${data?.sector}` },
+        { key: 'Markets', content: 'Markets', linkTo: '/markets' },
+        { key: data?.sector, content: data?.sector, linkTo: `/sector/${data?.sector}` },
         { key: symbol, content: symbol?.toUpperCase(), active: true }
     ]
 
     return (
         <div style={{ margin: '1em 0' }}>
             {data?.sector && (
-                <Breadcrumb
-                    icon='right angle'
+                <CompanyBreadcrumb
                     sections={sections}
                     style={{ margin: '0 1em' }}
                 />
             )}
+            <CompanyHeader company={company} event={event!} style={{ margin: '10px' }} />
+            <AddToWatchlist style={{ margin: '10px' }} />
             <CompanyProfile company={company} />
             <NewsItems>
                 {news?.items?.map(item =>

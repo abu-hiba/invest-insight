@@ -5,7 +5,6 @@ import { Endpoint } from '../routes/router'
 
 export class UserController implements Controller {
     public service: UserService
-    // public router = express.Router()
 
     constructor() {
         this.service = new UserService()
@@ -49,5 +48,21 @@ export class UserController implements Controller {
             route: '/auth/all',
             handler: async () => await this.service.getAll()
         },
+        {
+            method: 'post',
+            route: '/user/watchlist/:symbol',
+            handler: async (req: Request) => {
+                const { session, params: { symbol } } = req
+                const user = session?.user
+
+                if (!user.watchlist.includes(symbol)) {
+                    const watchlist = [ ...user.watchlist, symbol ]
+                    const updatedUser = await this.service.update(session?.user.id, { ...user, watchlist })
+                    return updatedUser
+                }
+
+                return user
+            }
+        }
     ]
 }

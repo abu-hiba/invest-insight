@@ -29,5 +29,8 @@ export interface Quote {
     open: number,
     close: number,
     high: number,
-    low: number
+    low: number,
+    latestPrice: number,
+    change: number,
+    changePercent: number
 }

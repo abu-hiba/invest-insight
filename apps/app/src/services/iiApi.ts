@@ -1,6 +1,6 @@
 const uri = process.env.API_URL
 
-function iiApi<T, B>(
+function iiApi<T, B = {}>(
     method: string,
     path: string,
     data?: B,

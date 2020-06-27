@@ -2,6 +2,7 @@ import { Request } from 'express'
 import { IexService } from '../services/iex.service'
 import { Endpoint } from '../routes/router'
 import { Controller, Company, NewsItem, Sector, Quote } from '../interfaces'
+import { IexSse } from '../infrastructure/iex/iexApi'
 
 export class IexController implements Controller {
     public service: IexService
@@ -45,6 +46,24 @@ export class IexController implements Controller {
             route: '/sector/:sector',
             handler: async ({ params: { sector } }: Request): Promise<Quote[]> =>
                 await this.service.companiesBySector(sector)
+        },
+        {
+            method: 'get',
+            route: '/sse/stocks/:symbols',
+            handler: (req, res) => {
+                const { symbols } = req.params
+
+                res.set({
+                    'Content-Type': 'text/event-stream',
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                })
+                res.flushHeaders()
+                res.write('\n\n')
+
+                const sse = new IexSse(process.env.IEX_TOKEN!, res)
+                sse.openStream(symbols.split(','))
+            }
         }
     ]
 }

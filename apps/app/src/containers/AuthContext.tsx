@@ -58,8 +58,22 @@ const useProvideAuth = () => {
 
     const pwdReset = () => {}
 
+    const fetchCurrentUser = () =>
+        iiApi<{ user: User }, null>('get', '/auth/me').then(({ user }) => user)
+
+    const clearUser = () => setUser({ data: null, loading: false })
+
+    const addToWatchlist = (symbol: string) =>
+        iiApi<User, {}>('post', `/user/watchlist/${symbol}`)
+            .then(user => setUser({ data: user, loading: false }))
+            .catch(error => setUser({ data: null, loading: false, error }))
+
     useEffect(() => {
-       //TODO implement /auth/me endpoint 
+       if (!user) {
+        fetchCurrentUser()
+            .then(data => setUser({ data, loading: false }))
+            .catch(clearUser)
+       } 
     }, [])
 
     return {
@@ -67,7 +81,8 @@ const useProvideAuth = () => {
         signIn,
         signUp,
         signOut,
-        pwdReset
+        pwdReset,
+        addToWatchlist
     }
 }
 

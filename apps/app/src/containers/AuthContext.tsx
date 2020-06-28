@@ -13,7 +13,9 @@ export interface AuthCtx {
     signIn: Function,
     signUp: Function,
     signOut: Function,
-    pwdReset: Function
+    pwdReset: Function,
+    addToWatchlist: Function,
+    removeFromWatchlist: Function
 }
 
 const AuthContext = createContext<AuthCtx>({
@@ -21,7 +23,9 @@ const AuthContext = createContext<AuthCtx>({
     signIn: () => {},
     signUp: () => {},
     signOut: () => {},
-    pwdReset: () => {}
+    pwdReset: () => {},
+    addToWatchlist: () => {},
+    removeFromWatchlist: () => {}
 })
 
 export const ProvideAuth: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -64,7 +68,12 @@ const useProvideAuth = () => {
     const clearUser = () => setUser({ data: null, loading: false })
 
     const addToWatchlist = (symbol: string) =>
-        iiApi<User, {}>('post', `/user/watchlist/${symbol}`)
+        iiApi<User>('post', `/user/watchlist/${symbol}`)
+            .then(user => setUser({ data: user, loading: false }))
+            .catch(error => setUser({ data: null, loading: false, error }))
+
+    const removeFromWatchlist = (symbol: string) =>
+        iiApi<User>('delete', `/user/watchlist/${symbol}`)
             .then(user => setUser({ data: user, loading: false }))
             .catch(error => setUser({ data: null, loading: false, error }))
 
@@ -82,7 +91,8 @@ const useProvideAuth = () => {
         signUp,
         signOut,
         pwdReset,
-        addToWatchlist
+        addToWatchlist,
+        removeFromWatchlist
     }
 }
 

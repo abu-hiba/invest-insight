@@ -6,7 +6,7 @@ function iiApi<T, B = {}>(
     data?: B,
     headers = new Headers
 ): Promise<T> {
-    if (method === 'post' || method === 'put' || method === 'patch') {
+    if (method === 'post' || method === 'put' || method === 'patch' || method === 'delete') {
         return fetch(`${uri}${path}`, {
             method: method.toUpperCase(),
             mode: 'cors',

@@ -3,7 +3,7 @@ import iiApi from '../services/iiApi'
 import { User } from '../interfaces'
 
 export interface Auth {
-    data: User | null,
+    userData: User | null,
     loading: boolean,
     error?: Error
 }
@@ -19,7 +19,7 @@ export interface AuthCtx {
 }
 
 const AuthContext = createContext<AuthCtx>({
-    user: { data: null, loading: true },
+    user: { userData: null, loading: true },
     signIn: () => {},
     signUp: () => {},
     signOut: () => {},
@@ -40,24 +40,24 @@ export const ProvideAuth: React.FC<{ children: ReactNode }> = ({ children }) => 
 export const useAuth = () => useContext(AuthContext)
 
 const useProvideAuth = () => {
-    const [user, setUser] = useState<Auth>({ data: null, loading: true })
+    const [user, setUser] = useState<Auth>({ userData: null, loading: true })
 
     const signIn = (username: string, password: string): void => {
         iiApi<User, User>('post', '/auth/sign-in', { username, password })
-            .then(user => setUser({ data: user, loading: false }))
-            .catch(error => setUser({ data: null, loading: false, error }))
+            .then(user => setUser({ userData: user, loading: false }))
+            .catch(error => setUser({ userData: null, loading: false, error }))
     }
 
     const signUp = (username: string, email: string, password:string): void => {
         iiApi<User, User>('post', '/auth/register', { username, email, password })
-            .then(user => setUser({ data: user, loading: false }))
-            .catch(error => setUser({ data: null, loading: false, error }))
+            .then(user => setUser({ userData: user, loading: false }))
+            .catch(error => setUser({ userData: null, loading: false, error }))
     } 
 
     const signOut = (): void => {
         iiApi('post', '/auth/sign-out')
-            .then(() => setUser({ data: null, loading: false }))
-            .catch(error => setUser({ data: null, loading: false, error }))
+            .then(() => setUser({ userData: null, loading: false }))
+            .catch(error => setUser({ userData: null, loading: false, error }))
     }
 
     const pwdReset = () => {}
@@ -65,22 +65,22 @@ const useProvideAuth = () => {
     const fetchCurrentUser = () =>
         iiApi<{ user: User }, null>('get', '/auth/me').then(({ user }) => user)
 
-    const clearUser = () => setUser({ data: null, loading: false })
+    const clearUser = () => setUser({ userData: null, loading: false })
 
     const addToWatchlist = (symbol: string) =>
         iiApi<User>('post', `/user/watchlist/${symbol}`)
-            .then(user => setUser({ data: user, loading: false }))
-            .catch(error => setUser({ data: null, loading: false, error }))
+            .then(user => setUser({ userData: user, loading: false }))
+            .catch(error => setUser({ userData: null, loading: false, error }))
 
     const removeFromWatchlist = (symbol: string) =>
         iiApi<User>('delete', `/user/watchlist/${symbol}`)
-            .then(user => setUser({ data: user, loading: false }))
-            .catch(error => setUser({ data: null, loading: false, error }))
+            .then(user => setUser({ userData: user, loading: false }))
+            .catch(error => setUser({ userData: null, loading: false, error }))
 
     useEffect(() => {
        if (!user) {
         fetchCurrentUser()
-            .then(data => setUser({ data, loading: false }))
+            .then(data => setUser({ userData: data, loading: false }))
             .catch(clearUser)
        } 
     }, [])

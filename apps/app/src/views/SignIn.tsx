@@ -7,7 +7,7 @@ import { useAuth } from '../containers/AuthContext'
 const SignIn = () => {
     const { user, signIn } = useAuth()
 
-    return !user.data ? (
+    return !user.userData ? (
         <Segment>
             <SignInForm onSubmit={signIn} />
         </Segment>

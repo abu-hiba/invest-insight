@@ -70,7 +70,7 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                 </Responsive>
                 <Responsive as={Menu.Menu} minWidth={770} position="right">
                     <Menu.Item>
-                        {auth.user.data ? (
+                        {auth.user.userData ? (
                             <>
                                 <Link to='/profile'>
                                     <Button

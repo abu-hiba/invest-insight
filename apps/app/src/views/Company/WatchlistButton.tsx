@@ -10,7 +10,7 @@ interface AddToWatchlistProps {
 }
 
 const WatchlistButton: React.FC<AddToWatchlistProps> = ({ symbol, style }) => {
-    const { user: { data }, addToWatchlist, removeFromWatchlist } = useAuth()
+    const { user: { userData: data }, addToWatchlist, removeFromWatchlist } = useAuth()
     const history = useHistory()
 
     const handleClick = (symbol: string) => {

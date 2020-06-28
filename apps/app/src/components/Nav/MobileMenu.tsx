@@ -40,7 +40,7 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
                 width="thin"
                 borderless
             >
-                {auth.user.data ? (
+                {auth.user.userData ? (
                     <>
                         <Menu.Item
                             as={Link}

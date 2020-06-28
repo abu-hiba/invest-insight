@@ -57,7 +57,23 @@ export class UserController implements Controller {
 
                 if (!user.watchlist.includes(symbol)) {
                     const watchlist = [ ...user.watchlist, symbol ]
-                    const updatedUser = await this.service.update(session?.user.id, { ...user, watchlist })
+                    const updatedUser = await this.service.update(user._id, { ...user, watchlist })
+                    return updatedUser
+                }
+
+                return user
+            }
+        },
+        {
+            method: 'delete',
+            route: '/user/watchlist/:symbol',
+            handler: async (req: Request) => {
+                const { session, params: { symbol } } = req
+                const user = session?.user
+
+                if (user.watchlist.includes(symbol)) {
+                    const watchlist = user.watchlist.filter((item: string) => item !== symbol)
+                    const updatedUser = await this.service.update(user._id, { ...user, watchlist })
                     return updatedUser
                 }
 

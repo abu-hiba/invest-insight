@@ -5,7 +5,7 @@ import { useCompany, useCompanyNews, useEventStream } from '../../containers/Iex
 import { CompanyNewsItem, NewsItems } from './CompanyNews'
 import CompanyHeader from './CompanyHeader'
 import CompanyBreadcrumb from './CompanyBreadcrumb'
-import AddToWatchlist from './AddToWatchlist'
+import WatchlistButton from './WatchlistButton'
 
 const CompanyPage: React.FC = () => {
     const { symbol } = useParams() 
@@ -38,7 +38,7 @@ const CompanyPage: React.FC = () => {
                 />
             )}
             <CompanyHeader company={company} event={event!} style={{ margin: '10px' }} />
-            <AddToWatchlist style={{ margin: '10px' }} />
+            <WatchlistButton symbol={symbol!} style={{ margin: '10px' }} />
             <CompanyProfile company={company} />
             <NewsItems>
                 {news?.items?.map(item =>

@@ -1,7 +1,8 @@
 import React from 'react'
-import { Item, Header, Divider } from 'semantic-ui-react'
+import { Item, Header } from 'semantic-ui-react'
 import CSS from 'csstype'
 import { useAuth } from '../../containers/AuthContext'
+import WatchlistItem from './WatchlistItem'
 
 interface WatchlistProps {
     style?: CSS.Properties
@@ -23,13 +24,10 @@ const Watchlist: React.FC<WatchlistProps> = ({ style }) => {
                     ) : (
                         <Item.Group>
                             {userData.watchlist?.map(symbol =>
-                                <Item key={symbol}>
-                                    <Item.Content>
-                                        <div>
-                                            {symbol}
-                                        </div> 
-                                    </Item.Content>
-                                </Item>
+                                <WatchlistItem
+                                    key={symbol}
+                                    symbol={symbol}
+                                />
                             )}
                         </Item.Group>
                     )

@@ -1,9 +1,9 @@
 import React from 'react'
 import CSS from 'csstype'
-import { Placeholder, Header, Image, Button } from 'semantic-ui-react'
+import { Placeholder, Header, Image } from 'semantic-ui-react'
 import { CompanyState } from '../../containers/IexContainer'
 import { Quote } from '../../interfaces'
-import { round2Dp } from '../../utils/number'
+import Price, { PriceAttribution } from '../../components/Price'
 
 const CompanyHeaderText: CSS.Properties = {
     marginLeft: '10px',
@@ -53,18 +53,12 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, event, style }) 
                             <span style={{ color: '#545454' }}>{companyName}</span>
                         </Header>
                         <Header sub style={{ margin: '0 0 10px 0' }}>{industry}</Header>
-                        <p style={{ marginBottom: 0 }}>
-                            <span style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                                {latestPrice}{' '}
-                            </span>
-                            <span style={{ color: change >= 0 ? 'green' : 'red', fontSize: '16px' }}>
-                                {change >= 0 && '+'}{change}{' '}
-                                ({round2Dp(changePercent * 100)}%)
-                            </span>
-                        </p>
-                        <p style={{ fontSize: '11px', color: '#545454' }}>
-                            Prices provided by <a href="https://iexcloud.io" target="_blank" rel="noopener noreferrer">IEX Cloud</a>
-                        </p>
+                        <Price
+                            price={latestPrice}
+                            change={change}
+                            changePercent={changePercent}
+                        />
+                        <PriceAttribution/>
                     </div>
                 </>
             )}

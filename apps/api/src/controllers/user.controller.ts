@@ -58,6 +58,7 @@ export class UserController implements Controller {
                 if (!user.watchlist.includes(symbol)) {
                     const watchlist = [ ...user.watchlist, symbol ]
                     const updatedUser = await this.service.update(user._id, { ...user, watchlist })
+                    session!.user = updatedUser
                     return updatedUser
                 }
 
@@ -74,6 +75,7 @@ export class UserController implements Controller {
                 if (user.watchlist.includes(symbol)) {
                     const watchlist = user.watchlist.filter((item: string) => item !== symbol)
                     const updatedUser = await this.service.update(user._id, { ...user, watchlist })
+                    session!.user = updatedUser
                     return updatedUser
                 }
 

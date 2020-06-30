@@ -4,10 +4,10 @@ import { useAuth } from '../containers/AuthContext'
 
 const Profile = () => {
     const { user } = useAuth()
-    return user.data ? (
+    return user.userData ? (
         <>
-            <p>Username: {user.data.username}</p>
-            <p>Email: {user.data.email}</p>
+            <p>Username: {user.userData.username}</p>
+            <p>Email: {user.userData.email}</p>
         </>
     ) : (
         <Redirect to={{ pathname: '/' }} />

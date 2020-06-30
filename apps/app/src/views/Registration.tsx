@@ -7,7 +7,7 @@ import RegistrationForm from '../components/Input/RegistrationForm'
 const Registration = () => {
     const { user, signUp } = useAuth()
 
-    return !user.data ? (
+    return !user.userData ? (
         <Segment>
             <RegistrationForm onSubmit={signUp} />
         </Segment>

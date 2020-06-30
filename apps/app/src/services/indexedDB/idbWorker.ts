@@ -8,9 +8,10 @@ interface Payload<T = {}> {
     newStores: string[]
 }
 
+const ctx: Worker = self as any
 const dbName = 'InvestInsight'
 
-self.onmessage = (event: MessageEvent) => {
+ctx.onmessage = (event: MessageEvent) => {
     const { data: { type, payload } } = event
     handleRequest(type, payload)
 }
@@ -58,11 +59,11 @@ const createStore = (stores: string[]) => {
                 }
 
                 req.onsuccess = () => {
-                    self.postMessage('DB upgraded')
+                    ctx.postMessage('DB upgraded')
                     event.target.result.close()
                 }
                 req.onerror = () => {
-                    self.postMessage('DB upgrade error')
+                    ctx.postMessage('DB upgrade error')
                     event.target.result.close()
                 }
             }
@@ -81,11 +82,11 @@ const saveToDB = <T>({ store, key, data }: Payload<T>) => {
                 .add({ data, date: Date.now() }, key)
 
             req.onsuccess = () => {
-                self.postMessage(`Successfully added to ${store}`)
+                ctx.postMessage(`Successfully added to ${store}`)
                 db.close()
             }
             req.onerror = () => {
-                self.postMessage(`Error adding to ${store}`)
+                ctx.postMessage(`Error adding to ${store}`)
                 db.close()
             }
         }
@@ -104,12 +105,12 @@ const findInDB = ({ store, key }: Payload) => {
 
             req.onsuccess = () => {
                 req.result
-                    ? self.postMessage(req.result)
-                    : self.postMessage('Key not found') 
+                    ? ctx.postMessage(req.result)
+                    : ctx.postMessage('Key not found') 
                 db.close()
             }
             req.onerror = () => {
-                self.postMessage('Key not found')
+                ctx.postMessage('Key not found')
                 db.close()
             }
         }
@@ -127,11 +128,11 @@ const deleteFromDB = ({ store, key }: Payload) => {
                 .delete(key)
 
             req.onsuccess = () => {
-                self.postMessage(`${key} deleted from ${store}`)
+                ctx.postMessage(`${key} deleted from ${store}`)
                 db.close()
             }
             req.onerror = () => {
-                self.postMessage(`Error deleting ${key} from ${store}`)
+                ctx.postMessage(`Error deleting ${key} from ${store}`)
                 db.close()
             }
         }

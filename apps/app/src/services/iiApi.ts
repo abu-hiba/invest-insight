@@ -1,12 +1,12 @@
 const uri = process.env.API_URL
 
-function iiApi<T, B>(
+function iiApi<T, B = {}>(
     method: string,
     path: string,
     data?: B,
     headers = new Headers
 ): Promise<T> {
-    if (method === 'post' || method === 'put' || method === 'patch') {
+    if (method === 'post' || method === 'put' || method === 'patch' || method === 'delete') {
         return fetch(`${uri}${path}`, {
             method: method.toUpperCase(),
             mode: 'cors',

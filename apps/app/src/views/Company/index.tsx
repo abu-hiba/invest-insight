@@ -38,7 +38,10 @@ const CompanyPage: React.FC = () => {
                 />
             )}
             <CompanyHeader company={company} event={event!} style={{ margin: '10px' }} />
-            <WatchlistButton symbol={symbol!} style={{ margin: '10px' }} />
+            <WatchlistButton
+                symbol={symbol!}
+                style={{ margin: '10px' }}
+            />
             <CompanyProfile company={company} />
             <NewsItems>
                 {news?.items?.map(item =>

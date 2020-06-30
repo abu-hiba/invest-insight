@@ -138,7 +138,7 @@ export const useEventStream = () => {
         }
     }
 
-    const closeStream = () => sse.close()
+    const closeStream = () => sse && sse.close()
 
     return { openStream, closeStream, event }
 }

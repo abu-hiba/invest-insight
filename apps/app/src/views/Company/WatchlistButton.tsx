@@ -27,7 +27,7 @@ const WatchlistButton: React.FC<AddToWatchlistProps> = ({ symbol, style }) => {
         <div style={style}>
             <Button onClick={() => handleClick(symbol)} color='black'>
                 {data?.watchlist?.includes(symbol)
-                    ? '- Remove from Watchlist'
+                    ? <>&minus; Remove from Watchlist</>
                     : '+ Add to watchlist'
                 }
             </Button>

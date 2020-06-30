@@ -15,7 +15,8 @@ const CompanyHeaderText: CSS.Properties = {
 const CompanyHeaderImage: CSS.Properties = {
     flexShrink: 0,
     borderRadius: '5px',
-    height: 'auto:'
+    height: '90px',
+    width: '90px'
 }
 
 interface CompanyHeaderProps {
@@ -44,7 +45,6 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, event, style }) 
                 <>
                     <Image
                         src={`${process.env.LOGO_URL}/${data?.symbol}.png`}
-                        size='tiny'
                         style={CompanyHeaderImage}
                     />
                     <div style={CompanyHeaderText}>

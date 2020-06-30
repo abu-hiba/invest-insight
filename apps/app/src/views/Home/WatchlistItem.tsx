@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Item, Header } from 'semantic-ui-react'
 import CSS from 'csstype'
-import { useEventStream } from '../../containers/IexContainer'
 import Price from '../../components/Price'
+import { Quote } from '../../interfaces'
 
 interface WatchlistItemProps {
-    symbol: string
+    symbol: string,
+    event: Quote | undefined
 }
 
 const ItemContainer: CSS.Properties = {
-    backgroundColor: '#222',
+    backgroundColor: '#2b2c2d',
     padding: '0.75em',
     borderRadius: '5px'
 }
@@ -22,14 +23,14 @@ const ItemImage: CSS.Properties = {
     borderRadius: '5px'
 }
 
-const WatchlistItem: React.FC<WatchlistItemProps> = ({ symbol }) => {
-    const { openStream, closeStream, event } = useEventStream()
-    const { latestPrice, change, changePercent } = { ...event }
+const WatchlistItem: React.FC<WatchlistItemProps> = ({ symbol, event }) => {
+    const [symbolEvent, setSymbolEvent] = useState<Quote>()
+
+    const { latestPrice, change, changePercent } = { ...symbolEvent }
 
     useEffect(() => {
-        openStream([symbol])
-        return closeStream
-    }, [])
+        event?.symbol === symbol && setSymbolEvent(event) 
+    }, [event])
     
     return (
         <Item key={symbol} as={Link} to={`/company/${symbol}`} style={{ margin: '1em 0' }}>
@@ -41,13 +42,16 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ symbol }) => {
                             style={ItemImage}
                         />
                         <div>
-                            <Header as='h3' style={{ marginBottom: '0.5rem', color: '#FFF' }}>{symbol}{' '}</Header>
-                            {event && <Price
-                                price={latestPrice!}
-                                change={change!}
-                                changePercent={changePercent!}
+                            <Header
+                                as='h3'
+                                style={{ marginBottom: '0.5rem', color: '#FFF' }}
+                            >{symbol}{' '}</Header>
+                            <Price
+                                price={latestPrice}
+                                change={change}
+                                changePercent={changePercent}
                                 color='#FFF'
-                            />}
+                            />
                         </div>
                     </div>
                 </Item.Content>

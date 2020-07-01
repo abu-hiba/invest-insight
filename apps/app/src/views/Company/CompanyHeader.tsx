@@ -54,9 +54,9 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, event, style }) 
                         </Header>
                         <Header sub style={{ margin: '0 0 10px 0' }}>{industry}</Header>
                         <Price
-                            price={latestPrice}
-                            change={change}
-                            changePercent={changePercent}
+                            price={event?.symbol === data?.symbol ? latestPrice : undefined}
+                            change={event?.symbol === data?.symbol ? change : undefined}
+                            changePercent={event?.symbol === data?.symbol ? changePercent : undefined}
                         />
                         <PriceAttribution/>
                     </div>

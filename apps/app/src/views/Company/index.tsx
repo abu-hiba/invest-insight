@@ -4,8 +4,9 @@ import CompanyProfile from './CompanyProfile'
 import { useCompany, useCompanyNews, useEventStream } from '../../containers/IexContainer'
 import { CompanyNewsItem, NewsItems } from './CompanyNews'
 import CompanyHeader from './CompanyHeader'
-import CompanyBreadcrumb from './CompanyBreadcrumb'
 import WatchlistButton from './WatchlistButton'
+import BreadcrumbBar from '../../components/Nav/BreadcrumbBar'
+import PageContainer from '../../components/Layout/PageContainer'
 
 const CompanyPage: React.FC = () => {
     const { symbol } = useParams() 
@@ -30,29 +31,31 @@ const CompanyPage: React.FC = () => {
     ]
 
     return (
-        <div style={{ margin: '1em 0' }}>
-            {data?.sector && (
-                <CompanyBreadcrumb
-                    sections={sections}
-                    style={{ margin: '0 1em' }}
-                />
-            )}
-            <CompanyHeader company={company} event={event!} style={{ margin: '10px' }} />
-            <WatchlistButton
-                symbol={symbol!}
-                style={{ margin: '10px' }}
-            />
-            <CompanyProfile company={company} />
-            <NewsItems>
-                {news?.items?.map(item =>
-                    <CompanyNewsItem
-                        key={item.headline}
-                        loading={news.loading}
-                        {...item}
+        <>
+            <PageContainer>
+                {data?.sector && (
+                    <BreadcrumbBar
+                        sections={sections}
+                        style={{ marginBottom: '1em' }}
                     />
-                )}            
-            </NewsItems>
-        </div>
+                )}
+                <CompanyHeader company={company} event={event!} style={{ margin: '10px' }} />
+                <WatchlistButton
+                    symbol={symbol!}
+                    style={{ margin: '10px' }}
+                />
+                <CompanyProfile company={company} />
+                <NewsItems>
+                    {news?.items?.map(item =>
+                        <CompanyNewsItem
+                            key={item.headline}
+                            loading={news.loading}
+                            {...item}
+                        />
+                    )}            
+                </NewsItems>
+            </PageContainer>
+        </>
     )  
 }
 

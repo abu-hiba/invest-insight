@@ -5,9 +5,9 @@ import { CompanyState } from '../../containers/IexContainer'
 const CompanyProfile: React.FC<{ company: CompanyState }> = ({ company }) => {
     const { data, loading, error } = company
     return (
-        <Segment>
+        <Segment style={{ backgroundColor: '#1B1C1D', color: '#FFF' }}>
             {loading ? (
-                <Placeholder>
+                <Placeholder inverted>
                     <Placeholder.Paragraph>
                         <Placeholder.Line />
                         <Placeholder.Line />

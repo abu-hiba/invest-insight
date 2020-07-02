@@ -15,7 +15,7 @@ const WatchlistButton: React.FC<AddToWatchlistProps> = ({ symbol, style }) => {
 
     const handleClick = (symbol: string) => {
         if (data) {
-            data?.watchlist?.includes(symbol)
+            data.watchlist?.includes(symbol)
                 ? removeFromWatchlist(symbol)
                 : addToWatchlist(symbol)
         } else {
@@ -23,10 +23,12 @@ const WatchlistButton: React.FC<AddToWatchlistProps> = ({ symbol, style }) => {
         }
     }
 
+    const watching = data?.watchlist?.includes(symbol)
+
     return (
         <div style={style}>
-            <Button onClick={() => handleClick(symbol)} color='black'>
-                {data?.watchlist?.includes(symbol)
+            <Button onClick={() => handleClick(symbol)} color={watching ? 'red' : 'blue'}>
+                {watching
                     ? <>&minus; Remove from Watchlist</>
                     : '+ Add to watchlist'
                 }

@@ -6,15 +6,19 @@ import CSS from 'csstype'
 interface DarkSegmentProps {
     children: ReactNode,
     linkTo?: string,
+    href?: string,
     style?: CSS.Properties
 }
 
-const DarkSegment: React.FC<DarkSegmentProps> = ({ children, linkTo, style }) => {
+const DarkSegment: React.FC<DarkSegmentProps> = ({ children, linkTo, href, style }) => {
     const [hovered, setHovered] = useState(false)
     return (
         <Segment
             as={linkTo && Link}
             to={linkTo}
+            href={href && href}
+            target={href && "_blank"}
+            rel={href && "noopener noreferrer"}
             onMouseOver={() => setHovered(true)}
             onMouseOut={() => setHovered(false)}
             style={{

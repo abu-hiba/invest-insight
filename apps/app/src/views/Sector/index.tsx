@@ -1,12 +1,19 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Container, Image, Header } from 'semantic-ui-react'
+import { Image, Header, Responsive } from 'semantic-ui-react'
 import LazyLoad from 'react-lazyload'
 import CSS from 'csstype'
 import { useSector } from '../../containers/IexContainer'
 import BreadcrumbBar from '../../components/Nav/BreadcrumbBar'
 import PageContainer from '../../components/Layout/PageContainer'
 import DarkSegment from '../../components/Layout/DarkSegment'
+
+const sectorCompaniesContainer: CSS.Properties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'stretch',
+    justifyContent: 'space-between'
+}
 
 interface SectorCompanyProps {
     companyName: string,
@@ -23,7 +30,14 @@ const SectorCompany: React.FC<SectorCompanyProps> = ({
     symbol,
     style
 }) => (
-    <DarkSegment linkTo={`/company/${symbol}`} style={{ display: 'flex', justifyContent: 'space-between', ...style }}>
+    <DarkSegment
+        linkTo={`/company/${symbol}`}
+        style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            ...style
+        }}
+    >
         <div>
             <Header style={{ color: '#fff' }}>{symbol}</Header>
             <p style={{ color: '#fff' }}>{companyName}</p>
@@ -51,22 +65,31 @@ const SectorPage: React.FC = () => {
             <PageContainer>
                 {name && <BreadcrumbBar sections={sections} />}
                 <Header as='h2' style={{ color: '#fff' }}>{name}</Header>
-                <Container>
+                <div style={sectorCompaniesContainer}>
                     {!loading ? (
                         error ? error.message : (
-                            <div>
-                                {quotes?.map((quote, i) =>
-                                    i < 50 && 
-                                        <SectorCompany
-                                            key={quote.symbol}
+                            quotes?.map((quote, i) =>
+                                i < 50 && 
+                                    <React.Fragment key={quote.symbol}>
+                                        <Responsive
+                                            as={SectorCompany}
+                                            name={name}
+                                            style={{ margin: '0.3em', flexGrow: 1, width: '250px' }}
+                                            minWidth={500}
                                             {...quote}
-                                            style={{ margin: '0.5em' }}
                                         />
-                                )}
-                            </div>
+                                        <Responsive
+                                            as={SectorCompany}
+                                            name={name}
+                                            style={{ margin: '0.2em', width: '100%' }}
+                                            maxWidth={500}
+                                            {...quote}
+                                        />
+                                    </React.Fragment> 
+                            )
                         )
                     ) : 'Loading'}
-                </Container>
+                    </div>
             </PageContainer>
         </>
     )

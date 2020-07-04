@@ -46,13 +46,15 @@ const CompanyPage: React.FC = () => {
                 />
                 <CompanyProfile company={company} />
                 <NewsItems>
-                    {news?.items?.map(item =>
-                        <CompanyNewsItem
-                            key={item.headline}
-                            loading={news.loading}
-                            {...item}
-                        />
-                    )}            
+                    {news.items?.filter(({ lang }) => lang === 'en')
+                        .map(item =>
+                            <CompanyNewsItem
+                                key={item.headline}
+                                loading={news.loading}
+                                {...item}
+                            />
+                        )
+                    }            
                 </NewsItems>
             </PageContainer>
         </>

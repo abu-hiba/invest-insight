@@ -4,17 +4,11 @@ import CSS from 'csstype'
 import { useMarketRefData } from '../../containers/IexContainer'
 import PageContainer from '../../components/Layout/PageContainer'
 import DarkSegment from '../../components/Layout/DarkSegment'
+import SegmentContainer from '../../components/Layout/SegmentContainer'
 
 interface SectorSegmentProps {
     name: string,
     style?: CSS.Properties
-}
-
-const marketSectorsContainer: CSS.Properties = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'stretch',
-    justifyContent: 'space-between'
 }
 
 const SectorSegment: React.FC<SectorSegmentProps> = ({ name, style }) => (
@@ -33,7 +27,7 @@ const MarketSectors: React.FC = () => {
     return (
         <PageContainer>
             <Header as='h2' style={{ color: '#FFF' }} dividing>Market Sectors</Header>
-            <div style={marketSectorsContainer}>
+            <SegmentContainer>
                 {loading
                     ? 'Loading...'
                     : (error
@@ -56,7 +50,7 @@ const MarketSectors: React.FC = () => {
                         )
                     )
                 }
-            </div>
+            </SegmentContainer>
         </PageContainer>
     )
 }

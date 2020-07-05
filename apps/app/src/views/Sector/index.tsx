@@ -7,13 +7,7 @@ import { useSector } from '../../containers/IexContainer'
 import BreadcrumbBar from '../../components/Nav/BreadcrumbBar'
 import PageContainer from '../../components/Layout/PageContainer'
 import DarkSegment from '../../components/Layout/DarkSegment'
-
-const sectorCompaniesContainer: CSS.Properties = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'stretch',
-    justifyContent: 'space-between'
-}
+import SegmentContainer from '../../components/Layout/SegmentContainer'
 
 interface SectorCompanyProps {
     companyName: string,
@@ -61,37 +55,35 @@ const SectorPage: React.FC = () => {
     ]
      
     return (
-        <>
-            <PageContainer>
-                {name && <BreadcrumbBar sections={sections} />}
-                <Header as='h2' style={{ color: '#fff' }}>{name}</Header>
-                <div style={sectorCompaniesContainer}>
-                    {!loading ? (
-                        error ? error.message : (
-                            quotes?.map((quote, i) =>
-                                i < 50 && 
-                                    <React.Fragment key={quote.symbol}>
-                                        <Responsive
-                                            as={SectorCompany}
-                                            name={name}
-                                            style={{ margin: '0.3em', flexGrow: 1, width: '250px' }}
-                                            minWidth={500}
-                                            {...quote}
-                                        />
-                                        <Responsive
-                                            as={SectorCompany}
-                                            name={name}
-                                            style={{ margin: '0.2em', width: '100%' }}
-                                            maxWidth={500}
-                                            {...quote}
-                                        />
-                                    </React.Fragment> 
-                            )
+        <PageContainer>
+            {name && <BreadcrumbBar sections={sections} />}
+            <Header as='h2' style={{ color: '#fff' }}>{name}</Header>
+            <SegmentContainer>
+                {!loading ? (
+                    error ? error.message : (
+                        quotes?.map((quote, i) =>
+                            i < 50 && 
+                                <React.Fragment key={quote.symbol}>
+                                    <Responsive
+                                        as={SectorCompany}
+                                        name={name}
+                                        style={{ margin: '0.3em', flexGrow: 1, width: '250px' }}
+                                        minWidth={500}
+                                        {...quote}
+                                    />
+                                    <Responsive
+                                        as={SectorCompany}
+                                        name={name}
+                                        style={{ margin: '0.2em', width: '100%' }}
+                                        maxWidth={500}
+                                        {...quote}
+                                    />
+                                </React.Fragment> 
                         )
-                    ) : 'Loading'}
-                    </div>
-            </PageContainer>
-        </>
+                    )
+                ) : 'Loading'}
+                </SegmentContainer>
+        </PageContainer>
     )
 }
 

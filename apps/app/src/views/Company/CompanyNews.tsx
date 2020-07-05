@@ -1,14 +1,7 @@
-import React, { ReactNode, Fragment } from 'react'
+import React, { ReactNode } from 'react'
 import { Card, Placeholder, Header, Responsive } from 'semantic-ui-react'
-import CSS from 'csstype'
 import DarkSegment from '../../components/Layout/DarkSegment'
-
-const newsItemContainer: CSS.Properties = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'stretch',
-    justifyContent: 'space-between'
-}
+import SegmentContainer from '../../components/Layout/SegmentContainer'
 
 export interface CompanyNewsItemProps {
     loading: boolean,
@@ -45,9 +38,9 @@ export const CompanyNewsItem: React.FC<CompanyNewsItemProps> = ({
 export const NewsItems: React.FC<{ children: ReactNode }> = ({ children }) => (
     <div style={{ margin: '2em 1em' }}>
         <Header as ='h3' style={{ color: '#FFF' }}>News</Header>
-        <div style={newsItemContainer}>
+        <SegmentContainer>
             {React.Children.map(children, (child, i) =>
-                <Fragment key={i}>
+                <React.Fragment key={i}>
                     <Responsive
                         style={{ margin: '0.3em', flexGrow: 1, width: '250px' }}
                         minWidth={500}
@@ -60,8 +53,8 @@ export const NewsItems: React.FC<{ children: ReactNode }> = ({ children }) => (
                     >
                         {child}
                     </Responsive>
-                </Fragment>
+                </React.Fragment>
             )}
-        </div>
+        </SegmentContainer>
     </div>
 )

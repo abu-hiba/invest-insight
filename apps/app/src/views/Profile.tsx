@@ -4,17 +4,17 @@ import { useAuth } from '../containers/AuthContext'
 import PageContainer from '../components/Layout/PageContainer'
 
 const Profile = () => {
-    const { user } = useAuth()
+    const { user: { userData } } = useAuth()
 
-    const date = new Date(user.userData?.dateCreated!)
+    const date = new Date(userData?.dateCreated!)
 
-    return user.userData ? (
+    return userData ? (
         <PageContainer style={{ color: '#FFF' }}>
             <h3>Username</h3>
-            <p>{user.userData.username}</p>
+            <p>{userData.username}</p>
             <hr style={{ borderColor: '#FFF' }} />
             <h3>Email</h3>
-            <p>{user.userData.email}</p>
+            <p>{userData.email}</p>
             <hr style={{ borderColor: '#FFF' }} />
             <h3>Account Created</h3>
             <p>{date.toDateString()}</p>

@@ -4,16 +4,11 @@ import CSS from 'csstype'
 import { Auth } from '../../containers/AuthContext'
 import WatchlistItem from './WatchlistItem'
 import { useEventStream } from '../../containers/IexContainer'
+import PageContainer from '../../components/Layout/PageContainer'
 
 interface WatchlistProps {
     user: Auth,
     style?: CSS.Properties
-}
-
-const watchlistContainer: CSS.Properties = {
-    padding: '2em 1em 1em 1em',
-    borderRadius: '10px',
-    backgroundColor: '#1b1c1d'
 }
 
 const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
@@ -26,7 +21,7 @@ const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
     }, [])
 
     return (
-        <div style={{ ...watchlistContainer, ...style }}>
+        <PageContainer style={style}>
             <Header as='h2' style={{ color: '#FFF' }}>Watchlist</Header>
             {!userData ? (
                 <p style={{ color: '#FFF', fontSize: '1.2rem' }}>Search for assets to add to your watchlist</p>
@@ -49,7 +44,7 @@ const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
                     )
                 )
             )}
-        </div>
+        </PageContainer>
     )
 }
 

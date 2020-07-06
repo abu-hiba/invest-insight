@@ -11,24 +11,24 @@ interface BreadcrumbSection {
     key?: string
 }
 
-interface CompanyBreadcrumbProps {
+interface BreadcrumbBarProps {
     sections: BreadcrumbSection[],
     style?: CSS.Properties
 }
 
-const CompanyBreadcrumb: React.FC<CompanyBreadcrumbProps> = ({ sections, style }) => (
-    <Breadcrumb style={style}>
+const BreadcrumbBar: React.FC<BreadcrumbBarProps> = ({ sections, style }) => (
+    <Breadcrumb style={{ margin: 0, ...style }}>
         {sections.map(({ content, linkTo, active, key }, i, arr) =>
             linkTo ? (
                 <React.Fragment key={key}>
                     <Breadcrumb.Section as={Link} to={linkTo}>
                         {content}
                     </Breadcrumb.Section>
-                    {i !== (arr.length - 1) && <Breadcrumb.Divider icon='right angle' />}
+                    {i !== (arr.length - 1) && <Breadcrumb.Divider icon='right angle' style={{ color: '#fff' }} />}
                 </React.Fragment>
             ) : (
                 <React.Fragment key={key}>
-                    <Breadcrumb.Section active={active}>
+                    <Breadcrumb.Section active={active} style={{ color: '#fff' }}>
                         {content}
                     </Breadcrumb.Section>
                     {i !== (arr.length - 1) && <Breadcrumb.Divider icon='right angle' />}
@@ -38,4 +38,4 @@ const CompanyBreadcrumb: React.FC<CompanyBreadcrumbProps> = ({ sections, style }
     </Breadcrumb>
 )
 
-export default CompanyBreadcrumb
+export default BreadcrumbBar

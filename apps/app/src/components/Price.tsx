@@ -1,6 +1,6 @@
 import React from 'react'
+import { Placeholder } from 'semantic-ui-react'
 import CSS from 'csstype'
-import { Loader } from 'semantic-ui-react'
 import { round2Dp } from '../utils/number'
 
 const green = (color: string | undefined) => color ? 'rgb(0, 255, 0)' : 'green'
@@ -14,13 +14,13 @@ interface PriceProps {
 }
 
 export const PriceAttribution = () => (
-    <p style={{ fontSize: '11px', color: '#545454' }}>
+    <p style={{ fontSize: '11px', color: '#999' }}>
         Prices provided by <a href="https://iexcloud.io" target="_blank" rel="noopener noreferrer">IEX Cloud</a>
     </p>
 )
 
 const Price: React.FC<PriceProps> = ({ price, change, changePercent, style, color }) => (
-    <p style={{ marginBottom: 0, ...style }}>
+    <div style={{ marginBottom: 0, ...style }}>
         <span style={{ fontSize: '18px', fontWeight: 'bold', color: color ? color : '#000' }}>
             {price ? price : '--'}{' '}
         </span>
@@ -28,7 +28,7 @@ const Price: React.FC<PriceProps> = ({ price, change, changePercent, style, colo
             {change && change >= 0 && '+'}{change ? change : '--'}{' '}
             ({changePercent ? round2Dp(changePercent * 100) : '--'}%)
         </span>
-    </p>
+    </div>
 )
 
 export default Price

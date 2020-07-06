@@ -4,7 +4,7 @@ import { Segment, Menu, Button, Image, Icon, Responsive } from 'semantic-ui-reac
 import SearchField from '../Input/SearchField'
 import { AuthCtx } from '../../containers/AuthContext'
 import { MenuItem } from '../../interfaces'
-import { NoEmitOnErrorsPlugin } from 'webpack'
+import IexAttribution from '../Attribution'
 
 export interface NavbarProps {
     items: MenuItem[],
@@ -17,8 +17,7 @@ const menuContainer = {
     borderRadius: 0,
     border: 'none',
     padding: '0.5em 1em',
-    margin: 0,
-    maxWidth: `${window.screen.width}px`
+    margin: 0
 }
 
 const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
@@ -64,6 +63,7 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                 </Responsive>
                 <Responsive as={Menu.Item} minWidth={770}>
                     <SearchField size="small"/>
+                    <IexAttribution style={{ marginLeft: '2rem' }} />
                 </Responsive>
                 <Responsive as={Menu.Item} maxWidth={770} style={{ marginLeft: 0, paddingLeft: 0 }}>
                     <SearchField size="mini"/>

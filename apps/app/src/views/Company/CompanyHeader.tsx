@@ -48,15 +48,16 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, event, style }) 
                         style={CompanyHeaderImage}
                     />
                     <div style={CompanyHeaderText}>
-                        <Header as='h3' style={{ margin: '0 0 10px 0' }}>
+                        <Header as='h3' style={{ margin: '0 0 10px 0', color: '#fff' }}>
                             {symbol}{' '}|{' '}
-                            <span style={{ color: '#545454' }}>{companyName}</span>
+                            <span style={{ color: '#fff', fontWeight: 'normal' }}>{companyName}</span>
                         </Header>
-                        <Header sub style={{ margin: '0 0 10px 0' }}>{industry}</Header>
+                        <Header sub style={{ margin: '0 0 10px 0', color: '#fff' }}>{industry}</Header>
                         <Price
                             price={event?.symbol === data?.symbol ? latestPrice : undefined}
                             change={event?.symbol === data?.symbol ? change : undefined}
                             changePercent={event?.symbol === data?.symbol ? changePercent : undefined}
+                            color='#FFF'
                         />
                         <PriceAttribution/>
                     </div>

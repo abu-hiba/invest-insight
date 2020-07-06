@@ -4,9 +4,10 @@ import { useAuth } from '../../containers/AuthContext'
 
 const Home = () => {
     const { user } = useAuth()
+
     return (
         <>
-            <Watchlist user={user} style={{ margin: '1em' }} />
+            <Watchlist user={user} />
         </>
     )
 }

@@ -1,45 +1,33 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Container, Segment, Responsive, Header } from 'semantic-ui-react'
+import React from 'react'
+import { Responsive, Header } from 'semantic-ui-react'
 import CSS from 'csstype'
 import { useMarketRefData } from '../../containers/IexContainer'
+import PageContainer from '../../components/Layout/PageContainer'
+import DarkSegment from '../../components/Layout/DarkSegment'
+import SegmentContainer from '../../components/Layout/SegmentContainer'
 
 interface SectorSegmentProps {
     name: string,
     style?: CSS.Properties
 }
 
-const marketSectorsContainer: CSS.Properties = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'stretch',
-    justifyContent: 'space-between'
-}
-
-const SectorSegment: React.FC<SectorSegmentProps> = ({ name, style }) => {
-    const [hovered, setHovered] = useState(false)
-    return (
-        <Segment
-            raised={hovered}
-            onMouseOver={() => setHovered(true)}
-            onMouseOut={() => setHovered(false)}
-            style={style}
-        >
-            <Link to={`/sector/${name}`}>
-                <h4 style={{ color: `${hovered ? '#000' : '#545454'}` }}>
-                    {name}
-                </h4>
-            </Link>
-        </Segment>
-    )
-}
+const SectorSegment: React.FC<SectorSegmentProps> = ({ name, style }) => (
+    <DarkSegment
+        linkTo={`/sector/${name}`}
+        style={{ display: 'flex', alignItems: 'center', ...style }}
+    >
+        <h4 style={{ color: '#FFF' }}>
+            {name}
+        </h4>
+    </DarkSegment>
+)
 
 const MarketSectors: React.FC = () => {
     const { sectors, loading, error } = useMarketRefData()
     return (
-        <Container fluid style={{ margin: '1em 0' }}>
-            <Header as='h2' dividing>Market Sectors</Header>
-            <div style={marketSectorsContainer}>
+        <PageContainer>
+            <Header as='h2' style={{ color: '#FFF' }} dividing>Market Sectors</Header>
+            <SegmentContainer>
                 {loading
                     ? 'Loading...'
                     : (error
@@ -62,8 +50,8 @@ const MarketSectors: React.FC = () => {
                         )
                     )
                 }
-            </div>
-        </Container>
+            </SegmentContainer>
+        </PageContainer>
     )
 }
 

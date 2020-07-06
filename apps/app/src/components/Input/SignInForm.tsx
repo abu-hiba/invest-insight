@@ -29,7 +29,7 @@ const SignInForm = ({ onSubmit }: SignInFormProps) => {
                 value={password}
                 onChange={(e, { value }) => setPassword(value)}
             />
-            <Form.Button>Log In</Form.Button>
+            <Form.Button color='blue' style={{ width: '100%' }}>Log In</Form.Button>
         </Form>
     )
 }

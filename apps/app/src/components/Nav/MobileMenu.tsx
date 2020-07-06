@@ -85,7 +85,7 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
                 ))} 
             </Sidebar> 
             <Sidebar.Pusher
-                style={{ minHeight: `${window.screen.height}px` }}
+                style={{ minHeight: `${window.screen.availHeight - 200}px` }}
             >
                 {children}
             </Sidebar.Pusher>

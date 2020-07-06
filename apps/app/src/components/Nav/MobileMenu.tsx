@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Sidebar, Segment, Menu, Icon, Button } from 'semantic-ui-react'
+import { Sidebar, Segment, Menu, Icon } from 'semantic-ui-react'
 import { AuthCtx } from '../../containers/AuthContext'
 import { MenuItem } from '../../interfaces'
+import IexAttribution from '../Attribution'
 
 export interface MobileMenuProps {
     items: MenuItem[],
@@ -39,6 +40,7 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
                 visible={visible}
                 width="thin"
                 borderless
+                style={{ position: 'absolute' }}
             >
                 {auth.user.userData ? (
                     <>
@@ -83,9 +85,12 @@ const MobileMenu = ({ items, auth, children, show, setShow, signOut }: MobileMen
                         onClick={() => handleClick(name)}
                     />
                 ))} 
+                <Menu.Item>
+                    <IexAttribution/>
+                </Menu.Item>
             </Sidebar> 
             <Sidebar.Pusher
-                style={{ minHeight: `${window.screen.availHeight - 200}px` }}
+                style={{ minHeight: `${window.screen.availHeight}px` }}
             >
                 {children}
             </Sidebar.Pusher>

@@ -37,7 +37,7 @@ const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
                 value={password}
                 onChange={(e, { value }) => setPassword(value)}
             />
-            <Form.Button>Register</Form.Button>
+            <Form.Button color='blue' style={{ width: '100%' }}>Register</Form.Button>
         </Form>
     )
 }

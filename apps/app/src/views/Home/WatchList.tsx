@@ -2,16 +2,16 @@ import React, { useEffect } from 'react'
 import { Item, Header } from 'semantic-ui-react'
 import CSS from 'csstype'
 import { Auth } from '../../containers/AuthContext'
-import WatchlistItem from './WatchlistItem'
+import ListItem from './ListItem'
 import { useEventStream } from '../../containers/IexContainer'
-import PageContainer from '../../components/Layout/PageContainer'
+import SectionContainer from '../../components/Layout/SectionContainer'
 
-interface WatchlistProps {
+interface WatchListProps {
     user: Auth,
     style?: CSS.Properties
 }
 
-const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
+const WatchList: React.FC<WatchListProps> = ({ user, style }) => {
     const { userData, loading, error } = user
     const { openStream, closeStream, event } = useEventStream()
 
@@ -21,7 +21,7 @@ const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
     }, [])
 
     return (
-        <PageContainer style={style}>
+        <SectionContainer style={style}>
             <Header as='h2' style={{ color: '#FFF' }}>Watchlist</Header>
             {!userData ? (
                 <p style={{ color: '#FFF', fontSize: '1.2rem' }}>Search for assets to add to your watchlist</p>
@@ -34,7 +34,7 @@ const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
                     ) : (
                         <Item.Group>
                             {userData.watchlist?.map(symbol =>
-                                    <WatchlistItem
+                                    <ListItem
                                         key={symbol}
                                         symbol={symbol}
                                         event={event}
@@ -44,8 +44,8 @@ const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
                     )
                 )
             )}
-        </PageContainer>
+        </SectionContainer>
     )
 }
 
-export default Watchlist
+export default WatchList

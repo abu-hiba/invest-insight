@@ -5,7 +5,7 @@ import LazyLoad from 'react-lazyload'
 import CSS from 'csstype'
 import { useSector } from '../../containers/IexContainer'
 import BreadcrumbBar from '../../components/Nav/BreadcrumbBar'
-import PageContainer from '../../components/Layout/PageContainer'
+import SectionContainer from '../../components/Layout/SectionContainer'
 import DarkSegment from '../../components/Layout/DarkSegment'
 import SegmentContainer from '../../components/Layout/SegmentContainer'
 
@@ -55,7 +55,7 @@ const SectorPage: React.FC = () => {
     ]
      
     return (
-        <PageContainer>
+        <SectionContainer>
             {name && <BreadcrumbBar sections={sections} />}
             <Header as='h2' style={{ color: '#fff' }}>{name}</Header>
             <SegmentContainer>
@@ -83,7 +83,7 @@ const SectorPage: React.FC = () => {
                     )
                 ) : 'Loading'}
                 </SegmentContainer>
-        </PageContainer>
+        </SectionContainer>
     )
 }
 

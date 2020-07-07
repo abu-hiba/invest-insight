@@ -64,6 +64,12 @@ export class IexController implements Controller {
                 const sse = new IexSse(process.env.IEX_TOKEN!, res)
                 sse.openStream(symbols.split(','))
             }
+        },
+        {
+            method: 'get',
+            route: '/stocks/list/:listType/:limit?',
+            handler: async ({ params: { listType, limit } }): Promise<Quote[]> =>
+                await this.service.topList(listType, Number(limit) | 10)
         }
     ]
 }

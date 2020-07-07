@@ -95,10 +95,10 @@ export const useMarketRefData = (): RefState => {
     return refData
 }
 
-interface SectorState extends HookState { quotes?: Quote[] }
+export interface ListState extends HookState { quotes?: Quote[] }
 
-export const useSector = (sectorName: string): { sectorData: SectorState, companiesBySector: Function } => {
-    const [sectorData, setSectorData] = useState<SectorState>({ loading: true })
+export const useSector = (sectorName: string): { sectorData: ListState, companiesBySector: Function } => {
+    const [sectorData, setSectorData] = useState<ListState>({ loading: true })
 
     const db = useIDB()
 
@@ -123,6 +123,18 @@ export const useSector = (sectorName: string): { sectorData: SectorState, compan
     }
 
     return { sectorData, companiesBySector }
+}
+
+export const useList = (listType: 'gainers' | 'losers', limit?: number) => {
+    const [list, setList] = useState<ListState>()
+
+    useEffect(() => {
+        iiApi<Quote[]>('get', `/stocks/list/${listType}/${limit || ''}`)
+            .then(quotes => setList({ quotes, loading: false }))
+            .catch(error => setList({ loading: false, error }))
+    }, [])
+
+    return list
 }
 
 export const useEventStream = () => {

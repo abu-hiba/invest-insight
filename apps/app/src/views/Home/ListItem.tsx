@@ -5,7 +5,7 @@ import Price from '../../components/Price'
 import { Quote } from '../../interfaces'
 import DarkSegment from '../../components/Layout/DarkSegment'
 
-interface WatchlistItemProps {
+interface ListItemProps {
     symbol: string,
     event: Quote | undefined
 }
@@ -17,7 +17,7 @@ const ItemImage: CSS.Properties = {
     borderRadius: '5px'
 }
 
-const WatchlistItem: React.FC<WatchlistItemProps> = ({ symbol, event }) => {
+const ListItem: React.FC<ListItemProps> = ({ symbol, event }) => {
     const [symbolEvent, setSymbolEvent] = useState<Quote>()
 
     const { latestPrice, change, changePercent } = { ...symbolEvent }
@@ -51,4 +51,4 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ symbol, event }) => {
     )
 }
 
-export default WatchlistItem
+export default ListItem

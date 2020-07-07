@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import { useAuth } from '../containers/AuthContext'
-import PageContainer from '../components/Layout/PageContainer'
+import SectionContainer from '../components/Layout/SectionContainer'
 
 const Profile = () => {
     const { user: { userData } } = useAuth()
@@ -9,7 +9,7 @@ const Profile = () => {
     const date = new Date(userData?.dateCreated!)
 
     return userData ? (
-        <PageContainer style={{ color: '#FFF' }}>
+        <SectionContainer style={{ color: '#FFF' }}>
             <h3>Username</h3>
             <p>{userData.username}</p>
             <hr style={{ borderColor: '#FFF' }} />
@@ -18,7 +18,7 @@ const Profile = () => {
             <hr style={{ borderColor: '#FFF' }} />
             <h3>Account Created</h3>
             <p>{date.toDateString()}</p>
-        </PageContainer>
+        </SectionContainer>
     ) : (
         <Redirect to={{ pathname: '/' }} />
     )

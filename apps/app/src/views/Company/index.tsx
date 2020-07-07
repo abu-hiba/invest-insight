@@ -6,7 +6,7 @@ import { CompanyNewsItem, NewsItems } from './CompanyNews'
 import CompanyHeader from './CompanyHeader'
 import WatchlistButton from './WatchlistButton'
 import BreadcrumbBar from '../../components/Nav/BreadcrumbBar'
-import PageContainer from '../../components/Layout/PageContainer'
+import SectionContainer from '../../components/Layout/SectionContainer'
 
 const CompanyPage: React.FC = () => {
     const { symbol } = useParams() 
@@ -32,7 +32,7 @@ const CompanyPage: React.FC = () => {
 
     return (
         <>
-            <PageContainer>
+            <SectionContainer>
                 {data?.sector && (
                     <BreadcrumbBar
                         sections={sections}
@@ -56,7 +56,7 @@ const CompanyPage: React.FC = () => {
                         )
                     }            
                 </NewsItems>
-            </PageContainer>
+            </SectionContainer>
         </>
     )  
 }

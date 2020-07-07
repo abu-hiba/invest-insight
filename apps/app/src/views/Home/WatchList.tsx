@@ -4,7 +4,7 @@ import CSS from 'csstype'
 import { Auth } from '../../containers/AuthContext'
 import ListItem from './ListItem'
 import { useEventStream } from '../../containers/IexContainer'
-import PageContainer from '../../components/Layout/PageContainer'
+import SectionContainer from '../../components/Layout/SectionContainer'
 
 interface WatchListProps {
     user: Auth,
@@ -21,7 +21,7 @@ const WatchList: React.FC<WatchListProps> = ({ user, style }) => {
     }, [])
 
     return (
-        <PageContainer style={style}>
+        <SectionContainer style={style}>
             <Header as='h2' style={{ color: '#FFF' }}>Watchlist</Header>
             {!userData ? (
                 <p style={{ color: '#FFF', fontSize: '1.2rem' }}>Search for assets to add to your watchlist</p>
@@ -44,7 +44,7 @@ const WatchList: React.FC<WatchListProps> = ({ user, style }) => {
                     )
                 )
             )}
-        </PageContainer>
+        </SectionContainer>
     )
 }
 

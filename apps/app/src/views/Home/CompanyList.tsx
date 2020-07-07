@@ -1,6 +1,6 @@
 import React from 'react'
 import { ListState } from '../../containers/IexContainer'
-import PageContainer from '../../components/Layout/PageContainer'
+import SectionContainer from '../../components/Layout/SectionContainer'
 import { Header } from 'semantic-ui-react'
 import CSS from 'csstype'
 import ListItem from './ListItem'
@@ -13,7 +13,7 @@ interface CompanyListProps {
 
 const CompanyList: React.FC<CompanyListProps> = ({ list, header, style }) => {
     return (
-        <PageContainer style={style}>
+        <SectionContainer style={style}>
             <Header as='h2' style={{ color: '#FFF' }}>{header}</Header>
             {!list || list?.loading ? (
                 <>Loading...</>
@@ -26,7 +26,7 @@ const CompanyList: React.FC<CompanyListProps> = ({ list, header, style }) => {
                     />
                 ))
             )}
-        </PageContainer>
+        </SectionContainer>
     )
 }
 

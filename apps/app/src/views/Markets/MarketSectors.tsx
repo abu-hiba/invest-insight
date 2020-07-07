@@ -2,7 +2,7 @@ import React from 'react'
 import { Responsive, Header } from 'semantic-ui-react'
 import CSS from 'csstype'
 import { useMarketRefData } from '../../containers/IexContainer'
-import PageContainer from '../../components/Layout/PageContainer'
+import SectionContainer from '../../components/Layout/SectionContainer'
 import DarkSegment from '../../components/Layout/DarkSegment'
 import SegmentContainer from '../../components/Layout/SegmentContainer'
 
@@ -25,7 +25,7 @@ const SectorSegment: React.FC<SectorSegmentProps> = ({ name, style }) => (
 const MarketSectors: React.FC = () => {
     const { sectors, loading, error } = useMarketRefData()
     return (
-        <PageContainer>
+        <SectionContainer>
             <Header as='h2' style={{ color: '#FFF' }} dividing>Market Sectors</Header>
             <SegmentContainer>
                 {loading
@@ -51,7 +51,7 @@ const MarketSectors: React.FC = () => {
                     )
                 }
             </SegmentContainer>
-        </PageContainer>
+        </SectionContainer>
     )
 }
 

@@ -4,6 +4,11 @@ import CompanyList from './CompanyList'
 import { useAuth } from '../../containers/AuthContext'
 import { useList } from '../../containers/IexContainer'
 
+const flexList = {
+    flex: '1 1 30%',
+    minWidth: '290px'
+}
+
 const Home = () => {
     const { user } = useAuth()
     const gainersList = useList('gainers')
@@ -11,9 +16,11 @@ const Home = () => {
 
     return (
         <>
-            <WatchList user={user} />
-            <CompanyList list={gainersList!} header='Top Gainers' />
-            <CompanyList list={losersList!} header='Top Losers' />
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <WatchList user={user} style={flexList}/>
+                <CompanyList list={gainersList!} header='Top Gainers' style={flexList}/>
+                <CompanyList list={losersList!} header='Top Losers' style={flexList}/>
+            </div>
         </>
     )
 }

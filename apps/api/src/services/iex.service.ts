@@ -18,4 +18,7 @@ export class IexService {
 
     public companiesBySector = async (sector: string) =>
         await iexApi<Quote[]>(`/stock/market/collection/sector?collectionName=${sector}`) 
+
+    public topList = async (list: string, limit: number) =>
+        await iexApi<Quote[]>(`/stock/market/list/${list}?listLimit=${limit}`)
 }

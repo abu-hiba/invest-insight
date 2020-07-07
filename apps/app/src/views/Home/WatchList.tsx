@@ -2,16 +2,16 @@ import React, { useEffect } from 'react'
 import { Item, Header } from 'semantic-ui-react'
 import CSS from 'csstype'
 import { Auth } from '../../containers/AuthContext'
-import WatchlistItem from './WatchlistItem'
+import ListItem from './ListItem'
 import { useEventStream } from '../../containers/IexContainer'
 import PageContainer from '../../components/Layout/PageContainer'
 
-interface WatchlistProps {
+interface WatchListProps {
     user: Auth,
     style?: CSS.Properties
 }
 
-const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
+const WatchList: React.FC<WatchListProps> = ({ user, style }) => {
     const { userData, loading, error } = user
     const { openStream, closeStream, event } = useEventStream()
 
@@ -34,7 +34,7 @@ const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
                     ) : (
                         <Item.Group>
                             {userData.watchlist?.map(symbol =>
-                                    <WatchlistItem
+                                    <ListItem
                                         key={symbol}
                                         symbol={symbol}
                                         event={event}
@@ -48,4 +48,4 @@ const Watchlist: React.FC<WatchlistProps> = ({ user, style }) => {
     )
 }
 
-export default Watchlist
+export default WatchList

@@ -1,8 +1,9 @@
 import { Request } from 'express'
 import { IexService } from '../services/iex.service'
 import { Endpoint } from '../routes/router'
-import { Controller, Company, NewsItem, Sector, Quote } from '../interfaces'
+import { Controller, Company, NewsItem, Sector, Quote, Exchange } from '../interfaces'
 import { IexSse } from '../infrastructure/iex/iexApi'
+import { InternationalSymbol } from '../interfaces/company.interface'
 
 export class IexController implements Controller {
     public service: IexService
@@ -70,6 +71,17 @@ export class IexController implements Controller {
             route: '/stocks/list/:listType/:limit?',
             handler: async ({ params: { listType, limit } }): Promise<Quote[]> =>
                 await this.service.topList(listType, Number(limit) | 10)
+        },
+        {
+            method: 'get',
+            route: '/exchange/all',
+            handler: async (): Promise<Exchange[]> => this.service.getExchanges()
+        },
+        {
+            method: 'get',
+            route: '/exchange/:exchange',
+            handler: async ({ params: { exchange } }): Promise<InternationalSymbol[]> =>
+                this.service.companiesByExchange(exchange)
         }
     ]
 }

@@ -41,7 +41,7 @@ export class UserController implements Controller {
         }, {
             method: 'get',
             route: '/auth/me',
-            handler: (req: Request) => req.session!.user ? { user: req.session } : {}
+            handler: (req: Request) => { return { user: req.session?.user } }
         },
         {
             method: 'get',

@@ -27,10 +27,10 @@ export default class IndexedDBWorker {
         this.worker.postMessage({ type: 'add', payload })
     }
 
-    public find = (payload: Payload) => {
+    public find = <T>(payload: Payload) => {
         this.worker.postMessage({ type: 'find', payload })
         
-        return new Promise((resolve, reject) => {
+        return new Promise<T>((resolve, reject) => {
             this.worker.onmessage = ({ data: { data, date } }) => {
                 const ageInHrs = (Date.now() - date) / (1000 * 60 * 60)
 

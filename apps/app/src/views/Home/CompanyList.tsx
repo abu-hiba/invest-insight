@@ -4,6 +4,7 @@ import SectionContainer from '../../components/Layout/SectionContainer'
 import { Header } from 'semantic-ui-react'
 import CSS from 'csstype'
 import ListItem from './ListItem'
+import { Quote } from '../../interfaces'
 
 interface CompanyListProps {
     list: ListState,
@@ -17,8 +18,8 @@ const CompanyList: React.FC<CompanyListProps> = ({ list, header, style }) => {
             <Header as='h2' style={{ color: '#FFF' }}>{header}</Header>
             {!list || list?.loading ? (
                 <>Loading...</>
-            ) : list?.error ? <>{list.error.message}</> :  (
-                list?.quotes?.map(quote => (
+            ) : list?.error ? <>{list.error.message}</> : (
+                list?.quotes?.map((quote: Quote) => (
                     <ListItem
                         key={quote.symbol}
                         symbol={quote.symbol}

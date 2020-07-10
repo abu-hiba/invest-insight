@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import iiApi from '../services/iiApi'
-import { Company, NewsItem, Sector, Quote } from '../interfaces'
+import { Company, NewsItem, Sector, Quote, InternationalSymbol, Exchange } from '../interfaces'
 import { useIDB } from './IDBContext'
 
 interface HookState { loading: boolean, error?: Error }
@@ -65,37 +65,7 @@ export const useCompanyNews = (symbol: string, last: number) => {
     return { news, fetchNews }
 }
 
-interface RefState extends HookState { sectors?: Sector[] }
-
-export const useMarketRefData = (): RefState => {
-    const [refData, setRefData] = useState<RefState>({ loading: true })
-
-    const db = useIDB()
-
-    useEffect(() => {
-        db?.find({ store: 'markets', key: 'sectors' })
-            .then(sectors => {
-                setRefData({ sectors: sectors as Sector[], loading: false })
-            })
-            .catch(() => {
-                fetchMarketSectors()
-            })
-    }, [])
-
-    const fetchMarketSectors = () => {
-        iiApi<Sector[]>('get', '/sector/all')
-            .then(sectors => {
-                setRefData({ sectors, loading: false })
-                
-                db?.save({ store: 'markets', key: 'sectors', data: sectors })
-            })
-            .catch(error => setRefData({ loading: false, error }))
-    }
-
-    return refData
-}
-
-export interface ListState extends HookState { quotes?: Quote[] }
+export interface ListState extends HookState { quotes?: Quote[] | InternationalSymbol[] }
 
 export const useSector = (sectorName: string): { sectorData: ListState, companiesBySector: Function } => {
     const [sectorData, setSectorData] = useState<ListState>({ loading: true })
@@ -123,6 +93,61 @@ export const useSector = (sectorName: string): { sectorData: ListState, companie
     }
 
     return { sectorData, companiesBySector }
+}
+
+export const useExchange = (exchangeName: string): { exchangeData: ListState, companiesByExchange: Function } => {
+    const [exchangeData, setExchangeData] = useState<ListState>({ loading: true })
+
+    const db = useIDB()
+
+    useEffect(() => {
+        db?.find({ store: 'exchanges', key: exchangeName })
+            .then(quotes => {
+                setExchangeData({ quotes: quotes as InternationalSymbol[], loading: false })
+            })
+            .catch(() => {
+                companiesByExchange(exchangeName)
+            })
+    }, [])
+
+    const companiesByExchange = (exchangeName: string): void => {
+        iiApi<InternationalSymbol[]>('get', `/exchange/${exchangeName}`)
+            .then(quotes => {
+                setExchangeData({ quotes, loading: false })
+
+                db?.save({ store: 'exchanges', key: exchangeName, data: quotes })
+            })
+            .catch(error => setExchangeData({ loading: false, error }))
+    }
+
+    return { exchangeData, companiesByExchange }
+}
+
+export interface MarketCategory<T> extends HookState { data?: T }
+
+export const useMarketCategories = () => {
+    const [sectors, setSectors] = useState<MarketCategory<Sector[]>>()
+    const [exchanges, setExchanges] = useState<MarketCategory<Exchange[]>>()
+
+    const db = useIDB()
+
+    const fetchSectors = () =>
+        iiApi<Sector[]>('get', '/sector/all')
+            .then(data => {
+                setSectors({ data, loading: false })
+                db?.save({ store: 'markets', key: 'sectors', data })
+            })
+            .catch(error => setSectors({ error, loading: false }))
+
+    const fetchExchanges = () =>
+        iiApi<Exchange[]>('get', '/exchange/all')
+            .then(data => {
+                setExchanges({ data, loading: false })
+                db?.save({ store: 'markets', key: 'exchanges', data })
+            })
+            .catch(error => setExchanges({ error, loading: false }))
+
+    return { sectors, fetchSectors, exchanges, fetchExchanges }
 }
 
 export const useList = (listType: 'gainers' | 'losers', limit?: number) => {

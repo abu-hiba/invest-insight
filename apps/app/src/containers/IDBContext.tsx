@@ -18,7 +18,7 @@ const useProvideIDB = () => {
     const [db, setDb] = useState<IndexedDBWorker>()
 
     useEffect(() => {
-       setDb(new IndexedDBWorker) 
+       setDb(new IndexedDBWorker(['markets', 'sectors', 'exchanges'])) 
     }, [])
 
     return db

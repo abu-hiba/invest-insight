@@ -6,14 +6,16 @@ const Markets = () => {
     const { sectors, exchanges, getSectors, getExchanges } = useMarketCategories()
 
     useEffect(() => {
-        getSectors()
-        getExchanges()
+       (async function () { 
+            await getSectors()
+            await getExchanges()
+        }())
     }, [])
 
     return (
         <>
-            <Category category={sectors} header='Sectors' />
-            <Category category={exchanges} header='Exchanges' />
+            <Category category={sectors} categorySlug='sector' header='Sectors' />
+            <Category category={exchanges} categorySlug='exchange' header='Exchanges' />
         </>
     )
 }

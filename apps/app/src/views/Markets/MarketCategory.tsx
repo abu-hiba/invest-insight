@@ -8,13 +8,22 @@ import { Sector, Exchange } from '../../interfaces'
 import { MarketCategory } from '../../containers/IexContainer'
 
 interface CategorySegmentProps {
+    categorySlug: 'sector' | 'exchange',
+    slug: string,
     name: string,
+    description: string,
     style?: CSS.Properties
 }
 
-const CategorySegment: React.FC<CategorySegmentProps> = ({ name, style }) => (
+const CategorySegment: React.FC<CategorySegmentProps> = ({
+    categorySlug,
+    slug,
+    name,
+    description,
+    style
+}) => (
     <DarkSegment
-        linkTo={`/sector/${name}`}
+        linkTo={`/${categorySlug}/${slug}/${description}`}
         style={{ display: 'flex', alignItems: 'center', ...style }}
     >
         <h4 style={{ color: '#FFF' }}>
@@ -25,10 +34,11 @@ const CategorySegment: React.FC<CategorySegmentProps> = ({ name, style }) => (
 
 interface CategoryProps {
     category: MarketCategory<Sector[] | Exchange[]> | undefined,
+    categorySlug: string,
     header: string
 }
 
-const Category: React.FC<CategoryProps> = ({ category, header }) => {
+const Category: React.FC<CategoryProps> = ({ category, categorySlug, header }) => {
     const { data, loading, error } = { ...category }
     return (
         <SectionContainer>
@@ -38,16 +48,22 @@ const Category: React.FC<CategoryProps> = ({ category, header }) => {
                     ? <span style={{ color: '#FFF' }}>Loading...</span>
                     : (error
                         ? 'Error loading market sectors'
-                        : data?.map(({ name, description }: { name: string, description: string }) =>
+                        : data?.map(({ name, description, exchange }: { name: string, description: string, exchange: string }) =>
                             <React.Fragment key={name || description}>
                                 <Responsive
                                     as={CategorySegment}
+                                    categorySlug={categorySlug}
+                                    slug={name || exchange}
+                                    description={!name ? description : ''}
                                     name={name || description}
                                     style={{ margin: '0.3em', flexGrow: 1, textAlign: 'center' }}
                                     minWidth={500}
                                 />
                                 <Responsive
                                     as={CategorySegment}
+                                    categorySlug={categorySlug}
+                                    slug={name || exchange}
+                                    description={!name ? description : ''}
                                     name={name || description}
                                     style={{ margin: '0.2em', width: '48%'  }}
                                     maxWidth={500}

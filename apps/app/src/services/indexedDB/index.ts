@@ -10,13 +10,13 @@ export default class IndexedDBWorker {
     private worker: Worker
     public data: any
     
-    constructor() {
+    constructor(stores: string[]) {
         this.worker = new idbWorker
-        this.initWorker()
+        this.initWorker(stores)
     }
 
-    public initWorker = () => {
-        this.createStore(['markets', 'sectors'])
+    public initWorker = (stores: string[]) => {
+        this.createStores(stores)
         
         this.worker.onmessage = e => {
             this.data = e.data
@@ -27,10 +27,10 @@ export default class IndexedDBWorker {
         this.worker.postMessage({ type: 'add', payload })
     }
 
-    public find = (payload: Payload) => {
+    public find = <T>(payload: Payload) => {
         this.worker.postMessage({ type: 'find', payload })
         
-        return new Promise((resolve, reject) => {
+        return new Promise<T>((resolve, reject) => {
             this.worker.onmessage = ({ data: { data, date } }) => {
                 const ageInHrs = (Date.now() - date) / (1000 * 60 * 60)
 
@@ -46,7 +46,7 @@ export default class IndexedDBWorker {
         })
     }
 
-    public createStore = (newStores: string[]) => {
+    public createStores = (newStores: string[]) => {
         this.worker.postMessage({ type: 'createStore', payload: { newStores } })
     }
 

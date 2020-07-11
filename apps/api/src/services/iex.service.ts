@@ -1,24 +1,37 @@
 import iexApi from "../infrastructure/iex/iexApi"
-import { Company, NewsItem, Sector, Quote } from "../interfaces"
+import { Company, NewsItem, Sector, Quote, Exchange } from "../interfaces"
+import { InternationalSymbol } from "../interfaces/company.interface"
 
 export class IexService {
-    public getCompanyProfile = async (symbol: string) =>
-        await iexApi<Company>(`/stock/${symbol}/company`)
+    async getCompanyProfile(symbol: string) {
+        return await iexApi<Company>(`/stock/${symbol}/company`)
+    }
 
-    public companyLogo = async (symbol: string) =>
-        await iexApi<{ url: string }>(`/stock/${symbol}/logo`)
+    async companyLogo(symbol: string) {
+        return await iexApi<{ url: string }>(`/stock/${symbol}/logo`)
+    }
 
-    public searchCompanies = async (query: string) =>
-        await iexApi<Company[]>(`/search/${query}`)
+    async searchCompanies(query: string) {
+        return await iexApi<Company[]>(`/search/${query}`)
+    }
     
-    public companyNews = async (symbol: string, last: number) =>
-        await iexApi<NewsItem[]>(`/stock/${symbol}/news/last/${last}`)
+    async companyNews(symbol: string, last: number) {
+        return await iexApi<NewsItem[]>(`/stock/${symbol}/news/last/${last}`)
+    }
 
-    public getSectors = async () => await iexApi<Sector[]>('/ref-data/sectors')
+    async getSectors() { return await iexApi<Sector[]>('/ref-data/sectors') }
 
-    public companiesBySector = async (sector: string) =>
-        await iexApi<Quote[]>(`/stock/market/collection/sector?collectionName=${sector}`) 
+    async companiesBySector(sector: string) {
+        return await iexApi<Quote[]>(`/stock/market/collection/sector?collectionName=${sector}`)
+    }
 
-    public topList = async (list: string, limit: number) =>
-        await iexApi<Quote[]>(`/stock/market/list/${list}?listLimit=${limit}`)
+    async getExchanges() { return await iexApi<Exchange[]>('/ref-data/exchanges') }
+    
+    async companiesByExchange(exchange: string) {
+        return await iexApi<InternationalSymbol[]>(`/ref-data/exchange/${exchange}/symbols`)
+    }
+
+    async topList(list: string, limit: number) {
+        return await iexApi<Quote[]>(`/stock/market/list/${list}?listLimit=${limit}`)
+    }
 }

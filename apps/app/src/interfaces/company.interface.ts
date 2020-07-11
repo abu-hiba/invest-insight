@@ -34,3 +34,23 @@ export interface Quote {
     change: number,
     changePercent: number
 }
+
+export interface Exchange {
+    exchange: string,
+    region: string,
+    description: string,
+    mic: string,
+    exchangeSuffix: string
+}
+
+export interface InternationalSymbol {
+    symbol: string,
+    exchange: string,
+    name: string,
+    date: string,
+    type: string,
+    iexId: string,
+    region: string,
+    currency: string,
+    isEnabled: boolean
+}

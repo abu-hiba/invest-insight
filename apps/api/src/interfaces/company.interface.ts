@@ -31,3 +31,23 @@ export interface Quote {
     high: number,
     low: number
 }
+
+export interface Exchange {
+    exchange: string,
+    region: string,
+    description: string,
+    mic: string,
+    exchangeSuffix: string
+}
+
+export interface InternationalSymbol {
+    symbol: string,
+    exchange: string,
+    name: string,
+    date: string,
+    type: string,
+    iexId: string,
+    region: string,
+    currency: string,
+    isEnabled: boolean
+}

@@ -63,7 +63,7 @@ const useProvideAuth = () => {
     const pwdReset = () => {}
 
     const fetchCurrentUser = () =>
-        iiApi<{ user: User }, null>('get', '/auth/me').then(({ user }) => user)
+        iiApi<{ user: User }>('get', '/auth/me').then(({ user }) => user)
 
     const clearUser = () => setUser({ userData: null, loading: false })
 
@@ -78,7 +78,7 @@ const useProvideAuth = () => {
             .catch(error => setUser({ userData: null, loading: false, error }))
 
     useEffect(() => {
-       if (!user) {
+       if (!user.userData) {
         fetchCurrentUser()
             .then(data => setUser({ userData: data, loading: false }))
             .catch(clearUser)

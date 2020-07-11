@@ -3,11 +3,11 @@ import Category from './MarketCategory'
 import { useMarketCategories } from '../../containers/IexContainer'
 
 const Markets = () => {
-    const { sectors, exchanges, fetchSectors, fetchExchanges } = useMarketCategories()
+    const { sectors, exchanges, getSectors, getExchanges } = useMarketCategories()
 
     useEffect(() => {
-        fetchSectors()
-        fetchExchanges()
+        getSectors()
+        getExchanges()
     }, [])
 
     return (

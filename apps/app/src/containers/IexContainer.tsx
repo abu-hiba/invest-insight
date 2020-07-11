@@ -101,9 +101,9 @@ export const useExchange = (exchangeName: string): { exchangeData: ListState, co
     const db = useIDB()
 
     useEffect(() => {
-        db?.find({ store: 'exchanges', key: exchangeName })
+        db?.find<InternationalSymbol[]>({ store: 'exchanges', key: exchangeName })
             .then(quotes => {
-                setExchangeData({ quotes: quotes as InternationalSymbol[], loading: false })
+                setExchangeData({ quotes, loading: false })
             })
             .catch(() => {
                 companiesByExchange(exchangeName)
@@ -139,6 +139,11 @@ export const useMarketCategories = () => {
             })
             .catch(error => setSectors({ error, loading: false }))
 
+    const getSectors = () =>
+        db?.find<Sector[]>({ store: 'markets', key: 'sectors' })
+            .then(data => setSectors({ data, loading: false }))
+            .catch(() => fetchSectors())
+
     const fetchExchanges = () =>
         iiApi<Exchange[]>('get', '/exchange/all')
             .then(data => {
@@ -147,7 +152,12 @@ export const useMarketCategories = () => {
             })
             .catch(error => setExchanges({ error, loading: false }))
 
-    return { sectors, fetchSectors, exchanges, fetchExchanges }
+    const getExchanges = () =>
+        db?.find<Exchange[]>({ store: 'markets', key: 'exchanges' })
+            .then(data => setExchanges({ data, loading: false }))
+            .catch(() => fetchExchanges())
+
+    return { sectors, getSectors, exchanges, getExchanges }
 }
 
 export const useList = (listType: 'gainers' | 'losers', limit?: number) => {

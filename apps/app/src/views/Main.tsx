@@ -8,12 +8,14 @@ import Profile from './Profile'
 import SignIn from './SignIn'
 import Registration from './Registration'
 import SectorPage from './Sector'
+import ExchangePage from './Exchange'
 
 const Main = () => (
     <Switch>
         <Route path='/markets' component={Markets}/>
         <Route path='/company/:symbol' component={CompanyPage}/>
         <Route path='/sector/:name' component={SectorPage}/>
+        <Route path='/exchange/:name/:description' component={ExchangePage}/>
         <Route path='/profile' component={Profile}/>
         <Route path='/sign-in' component={SignIn}/>
         <Route path='/registration' component={Registration}/>

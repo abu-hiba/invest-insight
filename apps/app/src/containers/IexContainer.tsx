@@ -73,20 +73,16 @@ export const useSector = (sectorName: string): { sectorData: ListState, companie
     const db = useIDB()
 
     useEffect(() => {
-        db?.find({ store: 'sectors', key: sectorName })
-            .then(quotes => {
-                setSectorData({ quotes: quotes as Quote[], loading: false })
-            })
-            .catch(() => {
-                companiesBySector(sectorName)
-            })
+        db ? db.find<Quote[]>({ store: 'sectors', key: sectorName })
+            .then(quotes => setSectorData({ quotes, loading: false }))
+            .catch(() => companiesBySector(sectorName))
+        : companiesBySector(sectorName)
     }, [])
 
     const companiesBySector = (sectorName: string): void => {
         iiApi<Quote[]>('get', `/sector/${sectorName}`)
             .then(quotes => {
                 setSectorData({ quotes, loading: false })
-
                 db?.save({ store: 'sectors', key: sectorName, data: quotes })
             })
             .catch(error => setSectorData({ loading: false, error }))
@@ -101,20 +97,16 @@ export const useExchange = (exchangeName: string): { exchangeData: ListState, co
     const db = useIDB()
 
     useEffect(() => {
-        db?.find<InternationalSymbol[]>({ store: 'exchanges', key: exchangeName })
-            .then(quotes => {
-                setExchangeData({ quotes, loading: false })
-            })
-            .catch(() => {
-                companiesByExchange(exchangeName)
-            })
+        db ? db.find<InternationalSymbol[]>({ store: 'exchanges', key: exchangeName })
+            .then(quotes => setExchangeData({ quotes, loading: false }))
+            .catch(() => companiesByExchange(exchangeName))
+        : companiesByExchange(exchangeName)
     }, [])
 
     const companiesByExchange = (exchangeName: string): void => {
         iiApi<InternationalSymbol[]>('get', `/exchange/${exchangeName}`)
             .then(quotes => {
                 setExchangeData({ quotes, loading: false })
-
                 db?.save({ store: 'exchanges', key: exchangeName, data: quotes })
             })
             .catch(error => setExchangeData({ loading: false, error }))
@@ -140,9 +132,10 @@ export const useMarketCategories = () => {
             .catch(error => setSectors({ error, loading: false }))
 
     const getSectors = () =>
-        db?.find<Sector[]>({ store: 'markets', key: 'sectors' })
+        db ? db.find<Sector[]>({ store: 'markets', key: 'sectors' })
             .then(data => setSectors({ data, loading: false }))
             .catch(() => fetchSectors())
+        : fetchSectors()
 
     const fetchExchanges = () =>
         iiApi<Exchange[]>('get', '/exchange/all')
@@ -153,9 +146,10 @@ export const useMarketCategories = () => {
             .catch(error => setExchanges({ error, loading: false }))
 
     const getExchanges = () =>
-        db?.find<Exchange[]>({ store: 'markets', key: 'exchanges' })
+        db ? db.find<Exchange[]>({ store: 'markets', key: 'exchanges' })
             .then(data => setExchanges({ data, loading: false }))
             .catch(() => fetchExchanges())
+        : fetchExchanges()
 
     return { sectors, getSectors, exchanges, getExchanges }
 }

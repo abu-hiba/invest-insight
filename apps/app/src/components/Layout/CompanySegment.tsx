@@ -27,7 +27,7 @@ const CompanySegment: React.FC<CompanySegmentProps> = ({
             <Header style={{ color: '#fff' }}>{symbol}</Header>
             <p style={{ color: '#fff' }}>{companyName}</p>
         </div>
-        <LazyLoad once={true}>
+        <LazyLoad once={true} offset={300}>
             <Image
                 src={`${process.env.LOGO_URL}/${symbol}.png`}
                 style={{ width: '50px', height: '50px', borderRadius: '5px' }}

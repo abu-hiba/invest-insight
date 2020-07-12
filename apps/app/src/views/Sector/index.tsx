@@ -1,49 +1,11 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Image, Header, Responsive } from 'semantic-ui-react'
-import LazyLoad from 'react-lazyload'
-import CSS from 'csstype'
+import { Header, Responsive } from 'semantic-ui-react'
 import { useSector } from '../../containers/IexContainer'
 import BreadcrumbBar from '../../components/Nav/BreadcrumbBar'
 import SectionContainer from '../../components/Layout/SectionContainer'
-import DarkSegment from '../../components/Layout/DarkSegment'
 import SegmentContainer from '../../components/Layout/SegmentContainer'
-
-interface SectorCompanyProps {
-    companyName: string,
-    symbol: string,
-    open: number,
-    close: number,
-    high: number,
-    low: number,
-    style?: CSS.Properties
-}
-
-const SectorCompany: React.FC<SectorCompanyProps> = ({
-    companyName,
-    symbol,
-    style
-}) => (
-    <DarkSegment
-        linkTo={`/company/${symbol}`}
-        style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            ...style
-        }}
-    >
-        <div>
-            <Header style={{ color: '#fff' }}>{symbol}</Header>
-            <p style={{ color: '#fff' }}>{companyName}</p>
-        </div>
-        <LazyLoad once={true}>
-            <Image
-                src={`${process.env.LOGO_URL}/${symbol}.png`}
-                style={{ width: '50px', height: '50px', borderRadius: '5px' }}
-            />
-        </LazyLoad>
-    </DarkSegment>
-)
+import CompanySegment from '../../components/Layout/CompanySegment'
 
 const SectorPage: React.FC = () => {
     const { name } = useParams()
@@ -65,14 +27,14 @@ const SectorPage: React.FC = () => {
                             i < 50 && 
                                 <React.Fragment key={quote.symbol}>
                                     <Responsive
-                                        as={SectorCompany}
+                                        as={CompanySegment}
                                         name={name}
                                         style={{ margin: '0.3em', flexGrow: 1, width: '250px' }}
                                         minWidth={500}
                                         {...quote}
                                     />
                                     <Responsive
-                                        as={SectorCompany}
+                                        as={CompanySegment}
                                         name={name}
                                         style={{ margin: '0.2em', width: '100%' }}
                                         maxWidth={500}

@@ -11,5 +11,6 @@ export default function validateEnv() {
         REDIS_HOST: str(),
         IEX_TOKEN: str(),
         IEX_URL: str(),
+        IEX_SSE: str()
     })
 }

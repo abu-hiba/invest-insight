@@ -16,9 +16,9 @@ const WatchList: React.FC<WatchListProps> = ({ user, style }) => {
     const { openStream, closeStream, event } = useEventStream()
 
     useEffect(() => {
-        userData && openStream(userData?.watchlist!)
+        userData?.watchlist?.length && openStream(userData.watchlist)
         return closeStream
-    }, [])
+    }, [userData])
 
     return (
         <SectionContainer style={style}>

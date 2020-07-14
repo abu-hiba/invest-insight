@@ -64,6 +64,11 @@ export class IexController implements Controller {
 
                 const sse = new IexSse(process.env.IEX_TOKEN!, res)
                 sse.openStream(symbols.split(','))
+
+                res.socket.on('end', () => {
+                    sse.closeStream()
+                    res.end()
+                })
             }
         },
         {

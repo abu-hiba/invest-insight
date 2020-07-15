@@ -65,25 +65,25 @@ export const useCompanyNews = (symbol: string, last: number) => {
     return { news, fetchNews }
 }
 
-export interface ListState extends HookState { quotes?: Quote[] | InternationalSymbol[] }
+export interface ListState<T> extends HookState { items?: T[] }
 
-export const useSector = (sectorName: string): { sectorData: ListState, companiesBySector: Function } => {
-    const [sectorData, setSectorData] = useState<ListState>({ loading: true })
+export const useSector = (sectorName: string): { sectorData: ListState<Quote>, companiesBySector: Function } => {
+    const [sectorData, setSectorData] = useState<ListState<Quote>>({ loading: true })
 
     const db = useIDB()
 
     useEffect(() => {
         db ? db.find<Quote[]>({ store: 'sectors', key: sectorName })
-            .then(quotes => setSectorData({ quotes, loading: false }))
+            .then(items => setSectorData({ items, loading: false }))
             .catch(() => companiesBySector(sectorName))
         : companiesBySector(sectorName)
     }, [])
 
     const companiesBySector = (sectorName: string): void => {
         iiApi<Quote[]>('get', `/sector/${sectorName}`)
-            .then(quotes => {
-                setSectorData({ quotes, loading: false })
-                db?.save({ store: 'sectors', key: sectorName, data: quotes })
+            .then(items => {
+                setSectorData({ items, loading: false })
+                db?.save({ store: 'sectors', key: sectorName, data: items })
             })
             .catch(error => setSectorData({ loading: false, error }))
     }
@@ -91,23 +91,26 @@ export const useSector = (sectorName: string): { sectorData: ListState, companie
     return { sectorData, companiesBySector }
 }
 
-export const useExchange = (exchangeName: string): { exchangeData: ListState, companiesByExchange: Function } => {
-    const [exchangeData, setExchangeData] = useState<ListState>({ loading: true })
+export const useExchange = (exchangeName: string): {
+    exchangeData: ListState<InternationalSymbol>,
+    companiesByExchange: Function
+} => {
+    const [exchangeData, setExchangeData] = useState<ListState<InternationalSymbol>>({ loading: true })
 
     const db = useIDB()
 
     useEffect(() => {
         db ? db.find<InternationalSymbol[]>({ store: 'exchanges', key: exchangeName })
-            .then(quotes => setExchangeData({ quotes, loading: false }))
+            .then(items => setExchangeData({ items, loading: false }))
             .catch(() => companiesByExchange(exchangeName))
         : companiesByExchange(exchangeName)
     }, [])
 
     const companiesByExchange = (exchangeName: string): void => {
         iiApi<InternationalSymbol[]>('get', `/exchange/${exchangeName}`)
-            .then(quotes => {
-                setExchangeData({ quotes, loading: false })
-                db?.save({ store: 'exchanges', key: exchangeName, data: quotes })
+            .then(items => {
+                setExchangeData({ items, loading: false })
+                db?.save({ store: 'exchanges', key: exchangeName, data: items })
             })
             .catch(error => setExchangeData({ loading: false, error }))
     }

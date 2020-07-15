@@ -4,9 +4,12 @@ import https from 'https'
 import { IncomingMessage } from 'http'
 
 export class IexSse {
+    private canWrite: boolean = false
     sse?: IncomingMessage
 
-    constructor(private token: string, private res: Response) { }
+    constructor(private token: string, private res: Response) {
+        this.res.socket.on('close', () => this.canWrite = false)
+    }
 
     public openStream = (symbols: string[]) => {
         https.get({
@@ -14,10 +17,11 @@ export class IexSse {
             path: `/stable/stocksUSNoUTP1Minute?token=${this.token}&symbols=${symbols.join()}`,
             hostname: process.env.IEX_SSE
         }, sse => {
+            this.canWrite = true
             this.sse = sse
 
             this.sse.on('data', data => {
-                this.res.write(`${data.toString()}\n\n`)
+                this.canWrite && this.res.write(`${data.toString()}\n\n`)
             })
 
             this.sse.on('error', err => {
@@ -26,7 +30,10 @@ export class IexSse {
         })
     }
 
-    public closeStream = () => this.sse?.destroy()
+    public closeStream = () => {
+        this.canWrite = false
+        this.sse?.destroy()
+    }
 }
 
 const iexApi = async <T>(path: string): Promise<T> => (

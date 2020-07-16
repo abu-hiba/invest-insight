@@ -33,7 +33,7 @@ const CategorySegment: React.FC<CategorySegmentProps> = ({
 )
 
 interface CategoryProps {
-    category: MarketCategory<Sector[] | Exchange[]> | undefined,
+    category: MarketCategory<(Sector | Exchange)[]> | undefined,
     categorySlug: string,
     header: string
 }
@@ -48,28 +48,31 @@ const Category: React.FC<CategoryProps> = ({ category, categorySlug, header }) =
                     ? <span style={{ color: '#FFF' }}>Loading...</span>
                     : (error
                         ? 'Error loading market sectors'
-                        : data?.map(({ name, description, exchange }: { name: string, description: string, exchange: string }) =>
-                            <React.Fragment key={name || description}>
-                                <Responsive
-                                    as={CategorySegment}
-                                    categorySlug={categorySlug}
-                                    slug={name || exchange}
-                                    description={!name ? description : ''}
-                                    name={name || description}
-                                    style={{ margin: '0.3em', flexGrow: 1, textAlign: 'center' }}
-                                    minWidth={500}
-                                />
-                                <Responsive
-                                    as={CategorySegment}
-                                    categorySlug={categorySlug}
-                                    slug={name || exchange}
-                                    description={!name ? description : ''}
-                                    name={name || description}
-                                    style={{ margin: '0.2em', width: '48%'  }}
-                                    maxWidth={500}
-                                />
-                            </React.Fragment>
-                        )
+                        : data?.map((category) => {
+                            const { name, description, exchange } = { ...category }
+                            return (
+                                <React.Fragment key={name || description}>
+                                    <Responsive
+                                        as={CategorySegment}
+                                        categorySlug={categorySlug}
+                                        slug={name || exchange}
+                                        description={!name ? description : ''}
+                                        name={name || description}
+                                        style={{ margin: '0.3em', flexGrow: 1, textAlign: 'center' }}
+                                        minWidth={500}
+                                    />
+                                    <Responsive
+                                        as={CategorySegment}
+                                        categorySlug={categorySlug}
+                                        slug={name || exchange}
+                                        description={!name ? description : ''}
+                                        name={name || description}
+                                        style={{ margin: '0.2em', width: '48%'  }}
+                                        maxWidth={500}
+                                    />
+                                </React.Fragment>
+                            )
+                        })
                     )
                 }
             </SegmentContainer>

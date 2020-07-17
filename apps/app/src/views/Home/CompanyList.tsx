@@ -7,7 +7,7 @@ import ListItem from './ListItem'
 import { Quote } from '../../interfaces'
 
 interface CompanyListProps {
-    list: ListState,
+    list: ListState<Quote>,
     header: string,
     style?: CSS.Properties
 }
@@ -16,10 +16,10 @@ const CompanyList: React.FC<CompanyListProps> = ({ list, header, style }) => {
     return (
         <SectionContainer style={style}>
             <Header as='h2' style={{ color: '#FFF' }}>{header}</Header>
-            {!list || list?.loading ? (
+            {!list || list.loading ? (
                 <>Loading...</>
-            ) : list?.error ? <>{list.error.message}</> : (
-                list?.quotes?.map((quote: Quote) => (
+            ) : list.error ? <>{list.error.message}</> : (
+                list.items?.map((quote: Quote) => (
                     <ListItem
                         key={quote.symbol}
                         symbol={quote.symbol}

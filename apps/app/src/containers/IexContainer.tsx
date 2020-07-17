@@ -158,11 +158,11 @@ export const useMarketCategories = () => {
 }
 
 export const useList = (listType: 'gainers' | 'losers', limit?: number) => {
-    const [list, setList] = useState<ListState>()
+    const [list, setList] = useState<ListState<Quote>>()
 
     useEffect(() => {
         iiApi<Quote[]>('get', `/stocks/list/${listType}/${limit || ''}`)
-            .then(quotes => setList({ quotes, loading: false }))
+            .then(items => setList({ items, loading: false }))
             .catch(error => setList({ loading: false, error }))
     }, [])
 

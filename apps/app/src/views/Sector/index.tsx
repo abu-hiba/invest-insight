@@ -19,7 +19,10 @@ const SectorPage: React.FC = () => {
         <SectionContainer>
             {name && <BreadcrumbBar sections={sections} />}
             <Header as='h2' style={{ color: '#fff' }}>{name}</Header>
-            <ExpandableCompanyList {...sectorData} />
+            <ExpandableCompanyList
+                {...sectorData}
+                itemsPerInterval={50}
+            />
         </SectionContainer>
     )
 }

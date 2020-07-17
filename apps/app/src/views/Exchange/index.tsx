@@ -19,7 +19,10 @@ const ExchangePage: React.FC = () => {
         <SectionContainer>
             {name && <BreadcrumbBar sections={sections} />}
             <Header as='h2' style={{ color: '#fff' }}>{description}</Header>
-            <ExpandableCompanyList {...exchangeData} />
+            <ExpandableCompanyList
+                {...exchangeData}
+                itemsPerInterval={50}
+            />
         </SectionContainer>
     )
 }

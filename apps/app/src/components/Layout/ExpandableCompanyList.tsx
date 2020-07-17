@@ -3,19 +3,35 @@ import { Responsive, Button } from 'semantic-ui-react'
 import CompanySegment from './CompanySegment'
 import { InternationalSymbol, Quote } from '../../interfaces'
 import SegmentContainer from './SegmentContainer'
+import { useHistory, useLocation } from 'react-router-dom'
+import { parseQueryString } from '../../utils/string'
 
 interface ExpandableCompanyListProps {
     items?: (Quote | InternationalSymbol)[],
     loading: boolean,
-    error?: Error
+    error?: Error,
+    itemsPerInterval: number
 }
 
-const ExpandableCompanyList: React.FC<ExpandableCompanyListProps> = ({ items, loading, error }) => {
-    const [itemsShowing, setItemsShowing] = useState(50)
+const ExpandableCompanyList: React.FC<ExpandableCompanyListProps> = ({
+    items,
+    loading,
+    error,
+    itemsPerInterval
+}) => {
+    const history = useHistory()
+    const { pathname, search } = useLocation()
+    const { itemsOnPage } = parseQueryString(search)
+
+    const minItems = itemsOnPage ? (
+        Number(itemsOnPage) < itemsPerInterval ? itemsPerInterval : Number(itemsOnPage)
+    ) : itemsPerInterval
+
+    const [itemsShowing, setItemsShowing] = useState(minItems)
 
     const incrementBy = (items: any[]): number => {
         const diff = items.length - itemsShowing
-        return diff >= 50 ? 50 : diff
+        return diff >= itemsPerInterval ? itemsPerInterval : diff
     }
 
     return (
@@ -52,7 +68,13 @@ const ExpandableCompanyList: React.FC<ExpandableCompanyListProps> = ({ items, lo
             {items && itemsShowing < items.length && (
                 <div style={{ display: 'block', textAlign: 'center' }}>
                     <Button
-                        onClick={() => setItemsShowing(prev => prev + incrementBy(items))}
+                        onClick={() => {
+                            setItemsShowing(prev => {
+                                const next = prev + incrementBy(items)
+                                history.push(`${pathname}?itemsOnPage=${next}`)
+                                return next
+                            })
+                        }}
                         color='black'
                     >
                         Load More

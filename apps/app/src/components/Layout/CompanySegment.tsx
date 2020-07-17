@@ -25,7 +25,7 @@ const CompanySegment: React.FC<CompanySegmentProps> = ({
     >
         <div>
             <Header style={{ color: '#fff' }}>{symbol}</Header>
-            <p style={{ color: '#fff' }}>{companyName}</p>
+            <p style={{ color: '#fff' }}>{companyName || name}</p>
         </div>
         <LazyLoad once={true} offset={300}>
             <Image

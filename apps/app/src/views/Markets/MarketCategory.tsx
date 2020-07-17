@@ -23,7 +23,7 @@ const CategorySegment: React.FC<CategorySegmentProps> = ({
     style
 }) => (
     <DarkSegment
-        linkTo={`/${categorySlug}/${slug}/${description}`}
+        linkTo={`/${categorySlug}/${slug}${description ? `/${description}` : ''}?itemsOnPage=50`}
         style={{ display: 'flex', alignItems: 'center', ...style }}
     >
         <h4 style={{ color: '#FFF' }}>

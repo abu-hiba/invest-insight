@@ -1,6 +1,6 @@
-import { Router } from 'express'
+import { Endpoint } from '../routes/router';
 
 export interface Controller {
-    router: Router
+    endpoints: Endpoint[]
 }
 

@@ -1,0 +1,38 @@
+version: "3.1"
+
+services:
+    app:
+        container_name: invest_insight_app
+        build:
+            context: ./apps/app
+            dockerfile: Dockerfile.prod
+        ports:
+            - '8080:8080'
+        restart: on-failure
+        depends_on:
+            - api
+    api:
+        container_name: invest_insight_api
+        build:
+            context: ./apps/api
+            dockerfile: Dockerfile.prod
+        ports:
+            - '3000:3000'
+        restart: on-failure
+        links:
+            - redis
+        depends_on:
+            - mongo-server
+    redis:
+        container_name: invest_insight_cache
+        image: redis:latest
+        expose:
+            - "6379"
+    mongo-server:
+        container_name: invest_insight_db
+        image: mongo:latest
+        restart: always
+        environment:
+            - MONGO_INITDB_DATABASE= InvestInsight
+        ports:
+            - '27017:27017'

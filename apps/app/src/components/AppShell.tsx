@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import Navbar from './Nav/Navbar'
 import MobileMenu from './Nav/MobileMenu'
+import { useAuth } from '../containers/AuthContext'
 
 export interface AppShellProps { children: React.ReactNode }
 
 const AppShell = ({ children }: AppShellProps) => {
     const [showMobileMenu, setShowMobileMenu] = useState(false)
     const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu)
+
+    const auth = useAuth()
+    const history = useHistory()
+
+    const signOutAndExit = (): void => {
+        history.push('/')
+        auth.signOut()
+    }
+
     const menuItems = [
         {
             name: 'Home',
@@ -16,15 +27,22 @@ const AppShell = ({ children }: AppShellProps) => {
             name: 'Markets',
             path: '/markets'
         },
-        {
-            name: 'Profile',
-            path: '/profile'
-        }
     ]
     return (
         <>
-            <Navbar items={menuItems} toggleMobileMenu={toggleMobileMenu} />
-            <MobileMenu items={menuItems} show={showMobileMenu} setShow={setShowMobileMenu}>
+            <Navbar
+                items={menuItems}
+                auth={auth}
+                toggleMobileMenu={toggleMobileMenu}
+                signOut={signOutAndExit}
+            />
+            <MobileMenu
+                items={menuItems}
+                auth={auth}
+                show={showMobileMenu}
+                setShow={setShowMobileMenu}
+                signOut={signOutAndExit}
+            >
                 {children}
             </MobileMenu>
         </>

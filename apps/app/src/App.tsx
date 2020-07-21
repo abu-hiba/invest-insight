@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router } from "react-router-dom"
 import AppShell from './components/AppShell'
 import Main from './views/Main'
+import { ProvideAuth } from './containers/AuthContext'
+import { ProvideIDB } from './containers/IDBContext'
 
 const App = () => (
     <Router>
-        <AppShell>
-            <Main/>
-        </AppShell>
+        <ProvideAuth>
+            <ProvideIDB>
+                <AppShell>
+                    <Main/>
+                </AppShell>
+            </ProvideIDB>
+        </ProvideAuth>
     </Router>
 )
 

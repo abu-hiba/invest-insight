@@ -2,15 +2,33 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Segment, Menu, Button, Image, Icon, Responsive } from 'semantic-ui-react'
 import SearchField from '../Input/SearchField'
+import { AuthCtx } from '../../containers/AuthContext'
+import { MenuItem } from '../../interfaces'
+import IexAttribution from '../Attribution'
 
-export interface MenuItem { name: string, path: string } 
-export interface NavbarProps { items: MenuItem[], toggleMobileMenu: Function }
+export interface NavbarProps {
+    items: MenuItem[],
+    auth: AuthCtx,
+    toggleMobileMenu: Function,
+    signOut: any // TODO: find correct type
+}
 
-const Navbar = ({ items, toggleMobileMenu }: NavbarProps) => {
+const menuContainer = {
+    borderRadius: 0,
+    border: 'none',
+    padding: '0.5em 1em',
+    margin: 0
+}
+
+const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
     const [activeItem, setActiveItem] = useState("")  
     const handleClick = (name: string) => setActiveItem(name) 
     return (
-        <Segment attached='top' inverted style={{ borderRadius: 0, padding: '0.5em 1em', marginBottom: 0 }}>
+        <Segment
+            attached='top'
+            inverted
+            style={menuContainer}
+        >
             <Menu inverted size='large' secondary style={{ padding: '0.5em' }}>
                 <Responsive
                     onClick={() => toggleMobileMenu()}
@@ -21,7 +39,7 @@ const Navbar = ({ items, toggleMobileMenu }: NavbarProps) => {
                     <Icon name="bars" size="large"/>
                 </Responsive>
                 <Responsive as={Menu.Item} minWidth={770} style={{ paddingLeft: 0 }}>
-                    <Image src="/src/public/iilogo_white.png" size="small"/>
+                    <Image src="./public/iilogo_white.png" size="small"/>
                 </Responsive>
                 <Responsive
                     as={Menu.Item}
@@ -29,7 +47,7 @@ const Navbar = ({ items, toggleMobileMenu }: NavbarProps) => {
                     maxWidth={770}
                     style={{ paddingLeft: 0, marginLeft: 0 }}
                 >
-                <Image src="/src/public/iilogo_white.png" size="tiny"/>
+                <Image src="./public/iilogo_white.png" size="tiny"/>
                 </Responsive>
                 <Responsive as={React.Fragment} minWidth={770}>
                     {items.map(({ name, path }: MenuItem) => (
@@ -45,14 +63,54 @@ const Navbar = ({ items, toggleMobileMenu }: NavbarProps) => {
                 </Responsive>
                 <Responsive as={Menu.Item} minWidth={770}>
                     <SearchField size="small"/>
+                    <IexAttribution style={{ marginLeft: '2rem' }} />
                 </Responsive>
                 <Responsive as={Menu.Item} maxWidth={770} style={{ marginLeft: 0, paddingLeft: 0 }}>
                     <SearchField size="mini"/>
                 </Responsive>
                 <Responsive as={Menu.Menu} minWidth={770} position="right">
                     <Menu.Item>
-                        <Button basic inverted>Log In</Button>
-                        <Button basic inverted style={{ marginLeft: '0.5em' }}>Sign Up</Button>
+                        {auth.user.userData ? (
+                            <>
+                                <Link to='/profile'>
+                                    <Button
+                                        basic
+                                        inverted
+                                        name='profile'
+                                        active={activeItem === 'profile'}
+                                        onClick={() => handleClick('profile')}
+                                    ><Icon name='user circle' />Profile</Button>
+                                </Link>
+                                <Button
+                                    basic
+                                    inverted
+                                    style={{ marginLeft: '0.5em' }}
+                                    onClick={signOut}
+                                >Sign Out</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to='/sign-in'>
+                                    <Button
+                                        basic
+                                        inverted
+                                        name='signin'
+                                        active={activeItem === 'signin'}
+                                        onClick={() => handleClick('signin')}
+                                    >Log In</Button>
+                                </Link>
+                                <Button
+                                    as={Link}
+                                    to='/registration'
+                                    basic
+                                    inverted
+                                    name='signup'
+                                    active={activeItem === 'signup'}
+                                    onClick={() => handleClick('signup')}
+                                    style={{ marginLeft: '0.5em' }}
+                                >Sign Up</Button>
+                            </>
+                        )}
                     </Menu.Item>
                 </Responsive>
             </Menu>

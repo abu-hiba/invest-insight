@@ -23,12 +23,11 @@ services:
             - redis
         depends_on:
             - mongo-server
-            # - redis
     redis:
         container_name: invest_insight_cache
         image: redis:latest
         expose:
-            - 6379
+            - "6379"
     mongo-server:
         container_name: invest_insight_db
         image: mongo:latest

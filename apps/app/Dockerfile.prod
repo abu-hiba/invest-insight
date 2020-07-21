@@ -1,9 +1,10 @@
-FROM node:10-alpine as build
+FROM node:10-alpine
 WORKDIR /invest-insight/app
 ENV PATH /invest-insight/app/node_modules/.bin:$PATH
 COPY package*.json /invest-insight/app/
 RUN yarn install --frozen-lockfile --silent
 COPY . /invest-insight/app
+RUN yarn add forever
 RUN yarn build
 EXPOSE 8080
-CMD ["node", "/invest-insight/app/dist/server.js"]
+CMD ["forever", "start", "/invest-insight/app/dist/server.js"]

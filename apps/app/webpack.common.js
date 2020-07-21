@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const dotenv = require('dotenv')
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = () => {
     const env = dotenv.config().parsed
@@ -59,14 +58,11 @@ module.exports = () => {
                 template: './src/index.html' 
             }),
             new webpack.DefinePlugin(envKeys)
-            //new BundleAnalyzerPlugin({
-                //analyzerMode: 'json'
-            //})
         ],
-        devServer: {
-            historyApiFallback: true,
-            // https: true
-        },
-        devtool: false
+        // devServer: {
+        //     historyApiFallback: true,
+        //     // https: true
+        // },
+        // devtool: false
     }
 }

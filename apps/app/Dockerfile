@@ -4,5 +4,5 @@ COPY package*.json ./
 RUN yarn install --silent
 COPY . .
 EXPOSE 8080
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]
 

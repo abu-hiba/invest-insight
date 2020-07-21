@@ -39,7 +39,7 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                     <Icon name="bars" size="large"/>
                 </Responsive>
                 <Responsive as={Menu.Item} minWidth={770} style={{ paddingLeft: 0 }}>
-                    <Image src="/src/public/iilogo_white.png" size="small"/>
+                    <Image src="./public/iilogo_white.png" size="small"/>
                 </Responsive>
                 <Responsive
                     as={Menu.Item}
@@ -47,7 +47,7 @@ const Navbar = ({ items, auth, toggleMobileMenu, signOut }: NavbarProps) => {
                     maxWidth={770}
                     style={{ paddingLeft: 0, marginLeft: 0 }}
                 >
-                <Image src="/src/public/iilogo_white.png" size="tiny"/>
+                <Image src="./public/iilogo_white.png" size="tiny"/>
                 </Responsive>
                 <Responsive as={React.Fragment} minWidth={770}>
                     {items.map(({ name, path }: MenuItem) => (

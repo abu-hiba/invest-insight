@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import { Database } from './db'
-import loggerMiddleware from './middleware/loggerMiddleware'
+import loggerMiddleware, { logger } from './middleware/loggerMiddleware'
 import sessionMiddleware from './middleware/sessionMiddleware'
 import v1 from './routes/v1'
 
@@ -40,7 +40,7 @@ class App {
 
     public listen = () => {
         this.app.listen(process.env.PORT, () => {
-            console.log(`Server listening on port ${process.env.PORT}`)
+            logger.info(`Server listening on port ${process.env.PORT}`)
         })
     }
 }

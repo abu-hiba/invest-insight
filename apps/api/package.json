@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --inspect=0.0.0.0 src/server.ts | ./node_modules/.bin/pino-pretty",
-    "start:prod": "tsc && node dist/server.js",
+    "start:prod": "tsc && forever start dist/server.js",
     "test": "mocha -r ts-node/register src/**/*.test.ts"
   },
   "author": "",
@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "express-pino-logger": "^5.0.0",
     "express-session": "^1.17.1",
+    "forever": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.7",
     "node-fetch": "^2.6.0",

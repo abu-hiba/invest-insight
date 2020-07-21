@@ -43,11 +43,6 @@ export class UserController implements Controller {
             route: '/auth/me',
             handler: (req: Request) => { return { user: req.session?.user } }
         },
-        // {
-            // method: 'get',
-            // route: '/auth/all',
-            // handler: async () => await this.service.getAll()
-        // },
         {
             method: 'post',
             route: '/user/watchlist/:symbol',

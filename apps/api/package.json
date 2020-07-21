@@ -9,7 +9,7 @@
     "test": "mocha -r ts-node/register src/**/*.test.ts"
   },
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",

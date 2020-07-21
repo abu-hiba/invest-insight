@@ -2,7 +2,7 @@
   "name": "invest-insight-webapp",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development --open --hot --host 0.0.0.0"
